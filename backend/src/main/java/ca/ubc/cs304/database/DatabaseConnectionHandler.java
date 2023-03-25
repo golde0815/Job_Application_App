@@ -10,21 +10,19 @@ import java.sql.Statement;
 
 @Component
 public class DatabaseConnectionHandler {
-    private final DataSource dataSource;
+    private final Connection connection;
 
-    public DatabaseConnectionHandler(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public DatabaseConnectionHandler(DataSource dataSource) throws SQLException {
+        this.connection = dataSource.getConnection();
     }
 
     public void exampleQuery() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM authors");
-            while (rs.next()) {
-                String firstName = rs.getString("AU_FNAME");
-                String lastName = rs.getString("AU_LNAME");
-                System.out.println(firstName + " " + lastName);
-            }
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM authors");
+        while (rs.next()) {
+            String firstName = rs.getString("AU_FNAME");
+            String lastName = rs.getString("AU_LNAME");
+            System.out.println(firstName + " " + lastName);
         }
     }
 }
