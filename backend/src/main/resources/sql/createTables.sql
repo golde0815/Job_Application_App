@@ -57,8 +57,8 @@ CREATE TABLE worked_at
     email      VARCHAR(255),
     company_id INTEGER,
     position   VARCHAR(255),
-    startDATE  DATE NOT NULL,
-    endDate    DATE NOT NULL,
+    start_date  DATE NOT NULL,
+    end_date    DATE NOT NULL,
     PRIMARY KEY (email, company_id),
     FOREIGN KEY (email) REFERENCES user_accounts (email)
         ON DELETE CASCADE,
@@ -125,7 +125,7 @@ CREATE TABLE user_applies_to
 (
     email       VARCHAR(255),
     job_id      INTEGER,
-    appliedDate DATE,
+    applied_date DATE,
     PRIMARY KEY (email, job_id),
     FOREIGN KEY (email) REFERENCES user_accounts (email)
         ON DELETE CASCADE,
@@ -175,7 +175,7 @@ CREATE TABLE course
 CREATE TABLE grade
 (
     percentage   INTEGER,
-    letter_grade CHAR(1) NOT NULL,
+    letter_grade VARCHAR(2) NOT NULL,
     PRIMARY KEY (percentage)
 );
 

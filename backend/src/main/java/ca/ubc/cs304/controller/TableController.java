@@ -1,28 +1,24 @@
 package ca.ubc.cs304.controller;
 
-import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.database.MigrationHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class TestController {
+public class TableController {
     private final MigrationHandler migrationHandler;
-    private final DatabaseConnectionHandler dbHandler;
 
-    public TestController(MigrationHandler migrationHandler, DatabaseConnectionHandler dbHandler) {
+    public TableController(MigrationHandler migrationHandler) {
         this.migrationHandler = migrationHandler;
-        this.dbHandler = dbHandler;
     }
 
     @PostMapping("/tables")
-    private String testEndpoint() {
+    private String createAndPopulateTables() {
         try {
-            migrationHandler.createTables();
+            migrationHandler.createAndPopulateTables();
             return "OK";
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,9 +27,9 @@ public class TestController {
     }
 
     @DeleteMapping("/tables")
-    private String test2Endpoint() {
+    private String dropTables() {
         try {
-            migrationHandler.deleteTables();
+            migrationHandler.dropTables();
             return "OK";
         } catch (Exception e) {
             e.printStackTrace();
