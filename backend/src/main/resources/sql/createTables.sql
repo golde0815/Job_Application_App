@@ -1,4 +1,4 @@
-CREATE TABLE user_accounts
+CREATE TABLE user_account
 (
     email        VARCHAR(255),
     address      VARCHAR(255),
@@ -28,7 +28,7 @@ CREATE TABLE rates
     value      INTEGER NOT NULL,
     r_comment  VARCHAR(255),
     PRIMARY KEY (email, company_id),
-    FOREIGN KEY (email) REFERENCES user_accounts (email)
+    FOREIGN KEY (email) REFERENCES user_account (email)
         ON DELETE CASCADE,
     FOREIGN KEY (company_id) REFERENCES company (company_id)
         ON DELETE CASCADE,
@@ -60,7 +60,7 @@ CREATE TABLE worked_at
     start_date  DATE NOT NULL,
     end_date    DATE NOT NULL,
     PRIMARY KEY (email, company_id),
-    FOREIGN KEY (email) REFERENCES user_accounts (email)
+    FOREIGN KEY (email) REFERENCES user_account (email)
         ON DELETE CASCADE,
     FOREIGN KEY (company_id) REFERENCES company (company_id)
         ON DELETE CASCADE
@@ -127,7 +127,7 @@ CREATE TABLE user_applies_to
     job_id      INTEGER,
     applied_date DATE,
     PRIMARY KEY (email, job_id),
-    FOREIGN KEY (email) REFERENCES user_accounts (email)
+    FOREIGN KEY (email) REFERENCES user_account (email)
         ON DELETE CASCADE,
     FOREIGN KEY (job_id) REFERENCES posted_job (job_id)
         ON DELETE CASCADE
@@ -140,7 +140,7 @@ CREATE TABLE resume
     url         VARCHAR(255),
     PRIMARY KEY (email, document_id),
     UNIQUE (url),
-    FOREIGN KEY (email) REFERENCES user_accounts (email)
+    FOREIGN KEY (email) REFERENCES user_account (email)
         ON DELETE CASCADE
 );
 
@@ -157,7 +157,7 @@ CREATE TABLE transcript
     document_id INTEGER,
     school_name VARCHAR(255) NOT NULL,
     PRIMARY KEY (email, document_id),
-    FOREIGN KEY (email) REFERENCES user_accounts (email)
+    FOREIGN KEY (email) REFERENCES user_account (email)
         ON DELETE CASCADE,
     FOREIGN KEY (school_name) REFERENCES school (name)
         ON DELETE CASCADE

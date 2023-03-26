@@ -1,10 +1,9 @@
-package ca.ubc.cs304.database;
+package ca.ubc.cs304.database.migration;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +22,8 @@ public class MigrationHandler {
     private final Connection connection;
     private final ResourceLoader resourceLoader;
 
-    public MigrationHandler(DataSource dataSource, ResourceLoader resourceLoader) throws SQLException {
-        this.connection = dataSource.getConnection();
+    public MigrationHandler(Connection connection, ResourceLoader resourceLoader) throws SQLException {
+        this.connection = connection;
         this.resourceLoader = resourceLoader;
     }
 
@@ -44,6 +43,7 @@ public class MigrationHandler {
     private void executeSqlFile(String filePath) {
         Resource resource = resourceLoader.getResource(filePath);
         if (!resource.exists()) {
+            // TODO: throw exception instead
             System.err.println("Error opening SQL file: " + filePath + " file not found");
             return;
         }

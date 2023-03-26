@@ -1,8 +1,7 @@
-package ca.ubc.cs304.database;
+package ca.ubc.cs304.database.dao;
 
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +11,8 @@ import java.sql.Statement;
 public class DatabaseConnectionHandler {
     private final Connection connection;
 
-    public DatabaseConnectionHandler(DataSource dataSource) throws SQLException {
-        this.connection = dataSource.getConnection();
+    public DatabaseConnectionHandler(Connection connection) throws SQLException {
+        this.connection = connection;
     }
 
     public void exampleQuery() throws SQLException {

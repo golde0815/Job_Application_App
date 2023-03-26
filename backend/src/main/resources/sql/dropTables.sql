@@ -17,4 +17,4 @@ DROP TABLE industry;
 DROP TABLE rates;
 DROP TABLE score;
 DROP TABLE company;
-DROP TABLE user_accounts;
+DROP TABLE user_account;

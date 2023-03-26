@@ -1,6 +1,6 @@
 package ca.ubc.cs304.controller;
 
-import ca.ubc.cs304.database.MigrationHandler;
+import ca.ubc.cs304.database.migration.MigrationHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
