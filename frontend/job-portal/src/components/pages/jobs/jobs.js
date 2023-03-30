@@ -1,7 +1,7 @@
 import React from "react";
 
-const JobsPage = () => {
+const Jobs = () => {
   return <div>THis is the jobs page</div>;
 };
 
-export default JobsPage;
+export default Jobs;

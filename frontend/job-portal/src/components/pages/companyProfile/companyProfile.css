@@ -1,0 +1,99 @@
+.companyprofile-header {
+    background-color: #ebebeb;
+    padding: 25px;
+    font-weight: normal;
+}
+
+.companyprofile-header h2 {
+    font-size: 23px;
+    margin: 0;
+    justify-content: center;
+}
+
+.companyprofile-delete button{
+    /* color: red; */
+    border-color: red;
+    background-color: white;
+    margin: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.companyprofile-delete button:hover {
+    background-color: rgb(255, 144, 144);
+  }
+
+
+.companyprofile-panel-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.companyprofile-info-container {
+    padding: 50px;
+    min-width: 40%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.companyprofile-info-container p {
+    text-align: justify;
+    padding: 10px;
+}
+
+.companyprofile-industry-dropdown {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.companyprofile-edit-toggle {
+    margin: 20px;
+    padding: 10px 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    min-width: 90px;
+    color: white;
+    border-width: 0px;
+    margin-left: 10px;
+}
+
+.companyprofile-edit-toggle.on {
+    background-color: #3385739b;
+}
+
+.companyprofile-edit-toggle.off {
+    background-color: #8c8c8ca9;
+}
+
+.companyprofile-action-container {
+    border: solid;
+    border-width: 1px;
+    border-radius: 30px;
+    border-color: black;
+    padding: 30px;
+    min-width: 40%;
+}
+  
+  .companyprofile-actions {
+    padding: 20px;
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+  }
+  
+  .companyprofile-action {
+    background-color: #3385739b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    min-width: max-content;
+  }
+  
+  .companyprofile-action:hover {
+    background-color: #235c50cb;
+  }
+  

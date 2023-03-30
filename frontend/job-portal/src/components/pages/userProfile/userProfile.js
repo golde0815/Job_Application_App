@@ -1,12 +1,15 @@
-import React from "react";
+import React, { Component } from "react";
 import "./userProfile.css";
 
-const UserProfile = () => {
-  return (
-    <p className="">
-      This is the profile page
-    </p>
-  );
+class UserProfile extends Component {
+    render() {
+        return (
+            <p className="userprofile-container">
+              This is the profile page
+            </p>
+        );
+
+    }
 };
 
 export default UserProfile;
