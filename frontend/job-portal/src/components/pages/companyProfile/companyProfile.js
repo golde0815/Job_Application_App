@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./companyProfile.css"
-
+import { Link } from "react-router-dom";
 
 class CompanyProfile extends Component {
   constructor(props) {
@@ -85,7 +85,9 @@ class CompanyProfile extends Component {
         <div className="companyprofile-action-container">
             <h2>View Company Information</h2>
             <div className="companyprofile-actions">
-              <button className="companyprofile-action">Open Positions</button>
+              <button className="companyprofile-action">
+                  <Link className= "companyprofile-action-link" to='/postedJobs'>Posted Jobs</Link>
+                </button>
               <button className="companyprofile-action">Ratings</button>
             </div>
         </div>

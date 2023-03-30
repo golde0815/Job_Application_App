@@ -4,6 +4,7 @@ import MenuBar from './menuBar/menuBar';
 import Jobs from './pages/jobs/jobs';
 import UserProfile from './pages/userProfile/userProfile'
 import CompanyProfile from './pages/companyProfile/companyProfile';
+import PostedJobs from './pages/postedJobs/postedJobs';
 
 class RouterComponent extends Component {
   render() {
@@ -14,6 +15,7 @@ class RouterComponent extends Component {
                 <Route exact path="/" element={<Jobs />} />
                 <Route path="/userProfile" element={<UserProfile />} />
                 <Route path="/companyProfile" element={<CompanyProfile />} />
+                <Route path="/postedJobs" element={<PostedJobs />} />
             </Routes>
         </Router>
     )
