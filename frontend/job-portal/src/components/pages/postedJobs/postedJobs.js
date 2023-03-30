@@ -76,7 +76,7 @@ class PostedJobs extends Component {
         {
             this.state.isSeeingJob && 
                 <PostedJob
-                    jobID={this.state.jobID}
+                    jobID={this.state.selectedJob}
                 ></PostedJob>
 
         }
