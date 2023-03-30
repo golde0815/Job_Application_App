@@ -4,3 +4,24 @@
     padding-top: 10px;
 
 }
+
+
+.postedjob-edit-toggle {
+    margin: 20px;
+    padding: 10px 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    min-width: 90px;
+    color: white;
+    border-width: 0px;
+    margin-left: 10px;
+}
+
+.postedjob-edit-toggle.on {
+    background-color: #3385739b;
+}
+
+.postedjob-edit-toggle.off {
+    background-color: #8c8c8ca9;
+}

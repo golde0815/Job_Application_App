@@ -48,7 +48,7 @@ class CompanyProfile extends Component {
 
     return (
         <div>
-          <div className="companyprofile-header">
+          <div className="page-header">
               <h2>MyCompanyProfile</h2>
           </div>
           <div className="companyprofile-delete">
