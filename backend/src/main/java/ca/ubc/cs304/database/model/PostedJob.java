@@ -10,6 +10,16 @@ public final class PostedJob {
     private String description;
     private int salary;
     private String recruiterEmail;
+    public PostedJob(int jobId, int companyId, LocalDate postedDate, String location, String description,
+                     int salary, String recruiterEmail) {
+        this.jobId = jobId;
+        this.companyId = companyId;
+        this.postedDate = postedDate;
+        this.location = location;
+        this.description = description;
+        this.salary = salary;
+        this.recruiterEmail = recruiterEmail;
+    }
 
     public int getJobId() {
         return jobId;

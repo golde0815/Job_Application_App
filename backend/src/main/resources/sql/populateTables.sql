@@ -98,7 +98,7 @@ VALUES ('andrewwilliams@gmail.com', 'Andrew Williams');
 
 INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
 VALUES (1, 2, '2019-01-01', 'Vancouver',
-        'We are seeking a highly motivated and experienced accountant to join our finance team.', 70000,
+        'We are seeking a highly motivated and experienced accountant to join our finance team.', 700000,
         'jasonmiller@gmail.com');
 INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
 VALUES (2, 3, '2019-01-02', 'Burnaby',

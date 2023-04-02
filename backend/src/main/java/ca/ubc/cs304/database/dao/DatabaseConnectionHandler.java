@@ -1,11 +1,7 @@
 package ca.ubc.cs304.database.dao;
-
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 @Component
 public class DatabaseConnectionHandler {
