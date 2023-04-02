@@ -7,6 +7,8 @@ import ca.ubc.cs304.database.model.ParseUpdateJson;
 import ca.ubc.cs304.database.model.PostedJob;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 public class PostedJobController {
     private final PostedJobDao postedJobDao;
@@ -28,6 +30,12 @@ public class PostedJobController {
         // return "OK";
         return postedJobDao.selectPostedJob();
     }
+    @GetMapping("/jobs/{column}")
+    private Map<String, Object>[] projectPostedJob(@PathVariable String column) {
+        return postedJobDao.projectPostedJob(column);
+        // return "OK";
+    }
+
 
     @PatchMapping("/jobs")
     private String updatePostedJob(@RequestBody ParseUpdateJson parseUpdateJson) {

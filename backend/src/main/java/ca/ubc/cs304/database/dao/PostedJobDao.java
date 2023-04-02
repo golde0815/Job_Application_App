@@ -5,9 +5,11 @@ import ca.ubc.cs304.database.model.ParseUpdateJson;
 import ca.ubc.cs304.database.model.PostedJob;
 import ca.ubc.cs304.util.NumberUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Date;
+import java.util.*;
 
 @Component
 public class PostedJobDao {
@@ -68,7 +70,27 @@ public class PostedJobDao {
         return result.toArray(new PostedJob[result.size()]);
     }
 
-    //public void updatePostedJob(String attribute, Integer jobId, String value) {
+    public Map<String, Object>[] projectPostedJob(String column) {
+        Set<Map<String, Object>> result = new HashSet<>();
+        try {
+            String query = "SELECT " + column + " FROM POSTED_JOB";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> model = new HashMap<>();
+                Object value = rs.getObject(column);
+                model.put(column, value);
+                result.add(model);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("project posted job failed: " + e.getMessage());
+        }
+        return result.toArray(new Map[result.size()]);
+     }
+
     public void updatePostedJob(ParseUpdateJson parseUpdateJson) {
         try {
             // System.out.println(jobId);

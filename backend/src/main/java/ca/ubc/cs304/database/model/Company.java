@@ -14,11 +14,15 @@ public final class Company {
         this.postedDate = postedDate;
     }
 
-    public Company(LocalDate postedDate) {
-        this.postedDate = postedDate;
+    public Company() {}
+
+    public String getName() {
+        return name;
     }
 
-    public Company() {}
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public LocalDate getPostedDate() {
         return postedDate;

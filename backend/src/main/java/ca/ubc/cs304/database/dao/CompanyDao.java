@@ -2,6 +2,7 @@ package ca.ubc.cs304.database.dao;
 
 import ca.ubc.cs304.database.model.Company;
 import ca.ubc.cs304.database.model.TopCompany;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -14,12 +15,12 @@ public class CompanyDao {
     public CompanyDao(Connection connection) {
         this.connection = connection;
     }
-    public Company[] selectCompanyPostedJob(Company company) {
+    public Company[] selectCompanyPostedJob(LocalDate postedDate) {
         ArrayList<Company> result = new ArrayList<>();
         try {
             String query = "SELECT C.NAME, P.POSTED_DATE FROM POSTED_JOB P JOIN COMPANY C on P.COMPANY_ID = C.COMPANY_ID AND P.POSTED_DATE > ?";
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setDate(1, java.sql.Date.valueOf(company.getPostedDate()));
+            ps.setDate(1, java.sql.Date.valueOf(postedDate));
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 Company model = new Company(rs.getString("name"),
