@@ -7,27 +7,19 @@ class FilterBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      company: [],
       postedAfter: '',
-      location: [],
-      salary: '', 
-
-      companyOptions: [],
+      location: null,
+      salary: null, 
       locationOptions: [],
     };
   }
 
   componentDidMount() {
-    // TODO: GET all companies and all locations and make set these as the values in companyOptions and locationOptions, 
+    // TODO: GET all locations and make set these as the values in locationOptions, 
     // remove the code below after done
 
     this.setState({
-        companyOptions: [
-            { value: 'company1', label: 'Company 1' },
-            { value: 'company2', label: 'Company 2' },
-            { value: 'company3', label: 'Company 3' }
-            // { value: 'companyID', label: 'companyName' }
-          ], 
+
         locationOptions: [
             { value: 'location1', label: 'Location 1' },
             { value: 'location2', label: 'Location 2' },
@@ -37,12 +29,9 @@ class FilterBar extends Component {
   
   }
 
-  handleCompanyChange = selectedOption => {
-    this.setState({ company: selectedOption.value });
-  };
-
   handlePostedAfterChange = event => {
     this.setState({ postedAfter: event.target.value });
+
   };
 
   handleLocationChange = selectedOption => {
@@ -54,18 +43,35 @@ class FilterBar extends Component {
   };
 
   handleApplyFilters = () => {
-    const { company, postedAfter, location, salary } = this.state
-    this.props.handleApplyFilters(company, postedAfter, location, salary)
+    const { postedAfter, location, salary } = this.state
+
+    if (!(postedAfter !== '' && location === null && salary === null) &&
+    !(postedAfter === '' && location !== null && salary === null) &&
+    !(postedAfter === '' && location === null && salary !== null)) {
+      window.alert("Please only select on filter at a time.")
+      return
+    }
+
+    this.props.handleApplyFilters(postedAfter, location, salary)
   };
+
+  handleClearFilters = () => {
+    this.setState({
+      postedAfter: '',
+      location: null, 
+      salary: null
+    })
+
+    document.getElementById('salary').value = null
+    document.getElementById('posted-after').value = null
+  }
 
   render() {
 
-    const {companyOptions, locationOptions} = this.state
+    const {locationOptions} = this.state
     
     return (
       <div className="filter-bar">
-        <label htmlFor="company">Company:</label>
-        <Dropdown id="company" options={companyOptions} value={this.state.company} onChange={this.handleCompanyChange} placeholder="Select an option" />
         <label htmlFor="posted-after">Posted After:</label>
         <input id="posted-after" type="date" value={this.state.postedAfter} onChange={this.handlePostedAfterChange} />
         <label htmlFor="location">Location:</label>
@@ -73,6 +79,7 @@ class FilterBar extends Component {
         <label htmlFor="salary">Minimum Salary:</label>
         <input id="salary" type="number" value={this.state.salary} onChange={this.handleSalaryChange} />
         <button id="filter-apply-button" onClick={this.handleApplyFilters}>Apply Filters</button>
+        <button id="filter-apply-button" onClick={this.handleClearFilters}>Clear Filters</button>
       </div>
     );
   }

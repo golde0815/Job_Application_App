@@ -42,11 +42,10 @@ class CompanyPostedJobs extends Component {
         }))
     }
 
-    handleApplyFilters = (company, postedAfter, location, salary) => {
-        console.warn(company)
-        console.warn(postedAfter)
-        console.warn(location)
-        console.warn(salary)
+    handleApplyFilters = (postedAfter, location, salary) => {
+        // console.warn(postedAfter)
+        // console.warn(location)
+        // console.warn(salary)
         // TODO: Apply filters, run SELECT query if no company filter, run JOIN query if compnay filter selected
         // Update the value of this.state.jobs based on the response
     }
