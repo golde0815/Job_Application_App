@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,46 +53,32 @@ public class PostedJobDao {
         }
     }
 
-    public PostedJob[] selectPostedJob(String attribute, String value) {
-        ArrayList<PostedJob> result = new ArrayList<>();
-        try {
-            // TODO: add WHERE clause
-            String query = "SELECT * FROM POSTED_JOB WHERE " + attribute + " = ?";
-            PreparedStatement ps = connection.prepareStatement(query);
-            switch (attribute) {
-                case "job_id", "company_id", "salary":
-                    ps.setInt(1,Integer.parseInt(value));
-                    break;
-                case "posted_date":
-                    ps.setDate(1, Date.valueOf(value));
-                    break;
-                case "location", "position", "description", "recruiter_email":
-                    ps.setString(1,value);
-                    break;
-                default:
-                    throw new SQLException("Invalid attribute name");
-            }
+    public List<PostedJob> selectPostedJob(String attribute, String value) {
+        String query = "SELECT * FROM POSTED_JOB WHERE " + attribute + " = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ArrayList<PostedJob> result = new ArrayList<>();
+            setPreparedStatementParameter(ps, 1, attribute, value);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 PostedJob model = new PostedJob(rs.getInt("job_id"),
-                                                rs.getInt("company_id"),
-                                                rs.getDate("posted_date").toLocalDate(),
-                                                rs.getString("position"),
-                                                rs.getString("location"),
-                                                rs.getString("description"),
-                                                rs.getInt("salary"),
-                                                rs.getString("recruiter_email"));
+                        rs.getInt("company_id"),
+                        rs.getDate("posted_date").toLocalDate(),
+                        rs.getString("position"),
+                        rs.getString("location"),
+                        rs.getString("description"),
+                        rs.getInt("salary"),
+                        rs.getString("recruiter_email"));
                 result.add(model);
             }
             rs.close();
-            ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return result;
+        } catch (SQLException | IllegalArgumentException e) {
             System.err.println("Select posted job failed: " + e.getMessage());
+            throw new GenericSQLException(e);
         }
-        return result.toArray(new PostedJob[result.size()]);
     }
 
+    // TODO: update this
     public Map<String, Object>[] projectPostedJob(String column) {
         Set<Map<String, Object>> result = new HashSet<>();
         try {
@@ -116,14 +103,18 @@ public class PostedJobDao {
     public void updatePostedJob(UpdatePostedJob updatePostedJob) {
         StringBuilder sql = new StringBuilder("UPDATE POSTED_JOB SET ");
         for (UpdatePostedJob.toUpdateFields field : updatePostedJob.toUpdate()) {
+            if (field.attribute().equals("job_id")) {
+                throw new IllegalArgumentException("Cannot update job_id");
+            }
             sql.append(field.attribute()).append(" = ?, ");
         }
         sql.delete(sql.length() - 2, sql.length());
         sql.append(" WHERE job_id = ?");
+
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int index = 1;
             for (UpdatePostedJob.toUpdateFields field : updatePostedJob.toUpdate()) {
-                setPreparedStatementParameter(ps, index, field);
+                setPreparedStatementParameter(ps, index, field.attribute(), field.value());
                 index++;
             }
             ps.setInt(index, updatePostedJob.jobId());
@@ -134,18 +125,18 @@ public class PostedJobDao {
         }
     }
 
-    private static void setPreparedStatementParameter(PreparedStatement ps, int index, UpdatePostedJob.toUpdateFields field)
+    private static void setPreparedStatementParameter(PreparedStatement ps, int index, String attribute, String value)
             throws SQLException {
-        switch (field.attribute()) {
-            case "company_id" -> {
-                Integer parsedValue = Utils.parseInt(field.value());
+        switch (attribute) {
+            case "job_id", "company_id" -> {
+                Integer parsedValue = Utils.parseInt(value);
                 if (parsedValue == null) {
-                    throw new IllegalArgumentException("Invalid value for " + field.attribute() + ": " + field.value());
+                    throw new IllegalArgumentException("Invalid value for " + attribute + ": " + value);
                 }
                 ps.setInt(index, parsedValue);
             }
             case "salary" -> {
-                Integer parsedValue = Utils.parseInt(field.value());
+                Integer parsedValue = Utils.parseInt(value);
                 if (parsedValue == null) {
                     ps.setNull(index, java.sql.Types.INTEGER);
                 } else {
@@ -153,24 +144,25 @@ public class PostedJobDao {
                 }
             }
             case "posted_date" -> {
-                LocalDate parsedValue = Utils.parseDate(field.value());
+                LocalDate parsedValue = Utils.parseDate(value);
                 if (parsedValue == null) {
-                    throw new IllegalArgumentException("Invalid value for " + field.attribute() + ": " + field.value());
+                    throw new IllegalArgumentException("Invalid value for " + attribute + ": " + value);
                 }
                 ps.setDate(index, Date.valueOf(parsedValue));
             }
             case "position", "location", "description" -> {
-                Utils.validateNotBlank(field.value(), field.attribute());
-                ps.setString(index, field.value());
+                Utils.validateNotBlank(value, attribute);
+                ps.setString(index, value);
             }
             case "recruiter_email" -> {
                 try {
-                    Utils.validateNotBlank(field.value(), field.attribute());
-                    ps.setString(index++, field.value());
+                    Utils.validateNotBlank(value, attribute);
+                    ps.setString(index++, value);
                 } catch (IllegalArgumentException e) {
                     ps.setNull(index, java.sql.Types.VARCHAR);
                 }
             }
+            default -> throw new IllegalArgumentException("Invalid attribute: " + attribute);
         }
     }
 }

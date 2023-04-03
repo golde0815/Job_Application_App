@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,8 +45,13 @@ public class PostedJobController {
 
     // 4. SELECT
     @GetMapping("/jobs")
-    private PostedJob[] selectPostedJob(@RequestParam String attribute, @RequestParam String value) {
-        return postedJobDao.selectPostedJob(attribute, value);
+    @ResponseBody
+    private List<PostedJob> selectPostedJob(@RequestParam String attribute, @RequestParam String value) {
+        try {
+            return postedJobDao.selectPostedJob(attribute, value);
+        } catch (GenericSQLException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
+        }
     }
 
     // 5. PROJECTION

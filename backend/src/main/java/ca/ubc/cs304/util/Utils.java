@@ -40,7 +40,7 @@ public class Utils {
     public static LocalDate parseDate(String s) {
         try {
             return LocalDate.parse(s);
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeParseException | NullPointerException e) {
             return null;
         }
     }
