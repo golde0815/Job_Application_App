@@ -2,6 +2,7 @@ package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.dao.CompanyDao;
 import ca.ubc.cs304.database.model.Company;
+import ca.ubc.cs304.database.model.CompanyWithRating;
 import ca.ubc.cs304.database.model.ResponseMessage;
 import ca.ubc.cs304.database.model.TopCompany;
 import ca.ubc.cs304.exception.GenericSQLException;
@@ -37,15 +38,25 @@ public class CompanyController {
         }
     }
 
+    // TODO: fix this
     // 6. JOIN
     @GetMapping("/company")
     private List<Company> selectCompanyPostedJob(@RequestParam LocalDate postedDate) {
-        System.out.println(postedDate);
         return companyDao.selectCompanyPostedJob(postedDate);
     }
 
+    // 8. Aggregation with HAVING
+    @GetMapping("/companies")
+    private List<CompanyWithRating> companiesRates(@RequestParam int minimumRating) {
+        try {
+            return companyDao.companiesWithMinimumRating(minimumRating);
+        } catch (GenericSQLException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
+        }
+    }
+
     // 9. Nested Aggregation with GROUP BY
-    @GetMapping("/topcompany")
+    @GetMapping("/topcompanies")
     private List<TopCompany> topRatedCompanies() {
         try {
             return companyDao.topRatedCompanies();

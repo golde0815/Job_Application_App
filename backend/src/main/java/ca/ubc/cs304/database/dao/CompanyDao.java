@@ -1,6 +1,7 @@
 package ca.ubc.cs304.database.dao;
 
 import ca.ubc.cs304.database.model.Company;
+import ca.ubc.cs304.database.model.CompanyWithRating;
 import ca.ubc.cs304.database.model.TopCompany;
 import ca.ubc.cs304.exception.GenericSQLException;
 import org.springframework.stereotype.Component;
@@ -52,6 +53,30 @@ public class CompanyDao {
         }
     }
 
+    public List<CompanyWithRating> companiesWithMinimumRating(int minimumRating) {
+        String query = "SELECT COMPANY_ID, NAME, AVG_VALUE FROM " +
+                "(SELECT COMPANY_ID, AVG(VALUE) AS AVG_VALUE " +
+                "FROM Rates " +
+                "GROUP BY COMPANY_ID " +
+                "HAVING AVG(VALUE) > ?) NATURAL JOIN COMPANY";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            List<CompanyWithRating> result = new ArrayList<>();
+            ps.setInt(1, minimumRating);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CompanyWithRating model = new CompanyWithRating(rs.getInt("company_id"),
+                        rs.getString("name"),
+                        rs.getInt("avg_value"));
+                result.add(model);
+            }
+            rs.close();
+            return result;
+        } catch (SQLException e) {
+            System.err.println("Select company with minimum rating failed: " + e.getMessage());
+            throw new GenericSQLException(e);
+        }
+    }
+
     public List<TopCompany> topRatedCompanies() {
         String query = "SELECT COMPANY_ID, NAME, AVG_VALUE, AVG_SALARY FROM " +
                 "(SELECT R.COMPANY_ID AS COMPANY_ID, AVG(R.VALUE) AS AVG_VALUE, AVG(P.SALARY) AS AVG_SALARY " +
@@ -73,7 +98,7 @@ public class CompanyDao {
             rs.close();
             return result;
         } catch (SQLException e) {
-            System.err.println("Select top company failed: " + e.getMessage());
+            System.err.println("Select top companies failed: " + e.getMessage());
             throw new GenericSQLException(e);
         }
     }
