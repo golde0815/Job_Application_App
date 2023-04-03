@@ -1,7 +1,7 @@
 import React, { Component }  from "react";
-import "./postedJob.css";
+import "./companyPostedJob.css";
 
-class PostedJob extends Component {
+class CompanyPostedJob extends Component {
     constructor(props) {
         super(props)
 
@@ -131,4 +131,4 @@ class PostedJob extends Component {
   }
 };
 
-export default PostedJob;
+export default CompanyPostedJob;

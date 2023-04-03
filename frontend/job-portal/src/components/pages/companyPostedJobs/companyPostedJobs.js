@@ -1,13 +1,13 @@
 import React, { Component }  from "react";
-import "./postedJobs.css";
-import PostedJob from "./postedJob";
+import "./companyPostedJobs.css";
+import CompanyPostedJob from "./companyPostedJob";
 
-class PostedJobs extends Component {
+class CompanyPostedJobs extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-        // TODO: Fetch posted jobs of the company
+        // TODO: GET posted jobs of the default company, fill this list with it instead
             jobs: [
                 {
                     'jobID': 1,
@@ -28,6 +28,7 @@ class PostedJobs extends Component {
                     'location': 'Vancouver, BC'
                 }
             ],
+            // TODO: GET the user that has applied to all jobs in the default company
             starUser: 'Arya',
             isSeeingJob: false,
             selectedJob: null
@@ -74,9 +75,9 @@ class PostedJobs extends Component {
         }
         {
             this.state.isSeeingJob && 
-                <PostedJob
+                <CompanyPostedJob
                     jobID={this.state.selectedJob}
-                ></PostedJob>
+                ></CompanyPostedJob>
 
         }
         </div>
@@ -85,4 +86,4 @@ class PostedJobs extends Component {
   }
 };
 
-export default PostedJobs;
+export default CompanyPostedJobs;

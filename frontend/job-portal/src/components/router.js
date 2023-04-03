@@ -4,7 +4,7 @@ import MenuBar from './menuBar/menuBar';
 import Jobs from './pages/jobs/jobs';
 import UserProfile from './pages/userProfile/userProfile'
 import CompanyProfile from './pages/companyProfile/companyProfile';
-import PostedJobs from './pages/postedJobs/postedJobs';
+import CompanyPostedJobs from './pages/companyPostedJobs/companyPostedJobs';
 import PostNewJob from './pages/postNewJob/postNewJob';
 
 class RouterComponent extends Component {
@@ -16,7 +16,7 @@ class RouterComponent extends Component {
                 <Route exact path="/" element={<Jobs />} />
                 <Route path="/userProfile" element={<UserProfile />} />
                 <Route path="/companyProfile" element={<CompanyProfile />} />
-                <Route path="/postedJobs" element={<PostedJobs />} />
+                <Route path="/postedJobs" element={<CompanyPostedJobs />} />
                 <Route path="/postNewJob" element={<PostNewJob />} />
             </Routes>
         </Router>
