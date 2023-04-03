@@ -25,3 +25,13 @@
 .postedjob-edit-toggle.off {
     background-color: #8c8c8ca9;
 }
+
+.go-back {
+    display: flex;
+    margin-left: 20px;
+    color: red;
+    cursor: pointer;
+    padding: 10px 10px;
+    border-width: 0px;
+    background-color: white;
+}

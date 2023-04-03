@@ -18,3 +18,11 @@
     margin-left: 10px;
     background-color: #3385739b;
 }
+
+.user-job-number-applied {
+    color: #338573;
+    font-size: 18px;
+    padding: 10px;
+    font-weight: bold;
+    margin-top: 0;
+}

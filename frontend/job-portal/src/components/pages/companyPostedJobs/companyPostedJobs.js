@@ -43,6 +43,14 @@ class CompanyPostedJobs extends Component {
         }))
     }
 
+    
+    handleGoBack = () => {
+        this.setState({
+            isSeeingJob: false, 
+            selectedJob: null
+        })
+    }
+
 
   render() {
 
@@ -77,6 +85,7 @@ class CompanyPostedJobs extends Component {
             this.state.isSeeingJob && 
                 <CompanyPostedJob
                     jobID={this.state.selectedJob}
+                    handleGoBack={this.handleGoBack}
                 ></CompanyPostedJob>
 
         }

@@ -15,25 +15,33 @@ class UserPostedJob extends Component {
             'recruiterEmail': 'recruiter@gmail.com',
             'category': 'Software',
             'skill': 'Python',
+            'numberApplied': 34
         }
     }
 
     componentDidMount() {
         // TODO: based on this.props.jobID, GET the job info
+        // please also get the GROUP BY requirement (no. of people who have applied to the job)
     }
 
 
   render() {
     const {jobID, position, postedDate, location, description, salary, 
-        recruiterEmail, category, skill} = this.state
+        recruiterEmail, category, skill, numberApplied} = this.state
 
     return (
         <div>
             <div className="page-header">
                 <h2>{jobID}:{position}</h2>
             </div>
-            <p>Posted: {postedDate}</p>
+            <button className="go-back" onClick={this.props.handleGoBack}>
+                GO BACK
+            </button>
+            <p className="user-job-number-applied">{numberApplied} have applied to this job.</p>
             <div className="user-job-info">
+                <p>
+                    Posted: {postedDate}
+                </p>
                 <p>
                     Position: {position}
                 </p>

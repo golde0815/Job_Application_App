@@ -25,6 +25,6 @@
     font-weight: bold;
 }
 
-.posted-job-index, .posted-job-name, .posted-job-date, .posted-job-position {
+.posted-job-index, .posted-job-name, .posted-job-date, .posted-job-position, .posted-job-location {
     padding-right: 60px;
 }

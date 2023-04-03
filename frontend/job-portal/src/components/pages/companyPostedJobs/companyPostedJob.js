@@ -56,6 +56,9 @@ class CompanyPostedJob extends Component {
             <div className="page-header">
                 <h2>{jobID}:{position}</h2>
             </div>
+            <button className="go-back" onClick={this.props.handleGoBack}>
+                GO BACK
+            </button>
             <p>Posted: {postedDate}</p>
             <div className="posted-job-info">
                 <p>Position: 
