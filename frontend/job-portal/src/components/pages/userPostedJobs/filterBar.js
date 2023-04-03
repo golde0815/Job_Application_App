@@ -47,7 +47,8 @@ class FilterBar extends Component {
 
     if (!(postedAfter !== '' && location === null && salary === null) &&
     !(postedAfter === '' && location !== null && salary === null) &&
-    !(postedAfter === '' && location === null && salary !== null)) {
+    !(postedAfter === '' && location === null && salary !== null) &&
+    !(postedAfter === '' && location === null && salary === null)) {
       window.alert("Please only select on filter at a time.")
       return
     }
@@ -63,7 +64,9 @@ class FilterBar extends Component {
     })
 
     document.getElementById('salary').value = null
-    document.getElementById('posted-after').value = null
+    document.getElementById('posted-after').value = ''
+
+    this.props.handleClearFilters()
   }
 
   render() {

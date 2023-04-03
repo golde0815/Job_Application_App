@@ -8,31 +8,42 @@ class CompanyPostedJobs extends Component {
         super(props)
 
         this.state = {
-        // TODO: GET all posted jobs for initialization (filter free list!)
-            jobs: [
-                {
-                    'jobID': 1,
-                    'position': 'Software Engineer',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC', 
-                },
-                {
-                    'jobID': 2, 
-                    'position': 'Software Engineer Coop',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC',
-                },
-                {
-                    'jobID': 3, 
-                    'position': 'UI/UX Designer',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC',
-                }
-            ],
+            jobs: [],
+            allJobs: [],
             isSeeingJob: false,
             selectedJob: null
         }
 
+    }
+    
+    componentDidMount = () => {
+        // TODO: GET ALL posted jobs for initialization 
+
+        const fetchedJobs = [
+            {
+                'jobID': 1,
+                'position': 'Software Engineer',
+                'postedDate': '23rd March, 2023',
+                'location': 'Vancouver, BC', 
+            },
+            {
+                'jobID': 2, 
+                'position': 'Software Engineer Coop',
+                'postedDate': '23rd March, 2023',
+                'location': 'Vancouver, BC',
+            },
+            {
+                'jobID': 3, 
+                'position': 'UI/UX Designer',
+                'postedDate': '23rd March, 2023',
+                'location': 'Vancouver, BC',
+            }
+        ]
+
+        this.setState({
+            allJobs: fetchedJobs, 
+            jobs: fetchedJobs
+        })
     }
 
     handleClickJob = (jobID) => {
@@ -43,17 +54,60 @@ class CompanyPostedJobs extends Component {
     }
 
     handleApplyFilters = (postedAfter, location, salary) => {
-        // console.warn(postedAfter)
-        // console.warn(location)
-        // console.warn(salary)
-        // TODO: Apply filters, run SELECT query if no company filter, run JOIN query if compnay filter selected
-        // Update the value of this.state.jobs based on the response
+        // TODO: Apply filters, run SELECT query, Update the value of this.state.jobs based on the response
+
+        var filteredJobs = []
+
+        if (postedAfter === '' && location === null && salary == null) {
+            filteredJobs = this.state.allJobs
+        } else if (postedAfter === '' && location === null) {
+            window.alert("Applying filters with salary = " + salary)
+            filteredJobs = [
+                {
+                    'jobID': 1,
+                    'position': 'Software Engineer',
+                    'postedDate': '23rd March, 2023',
+                    'location': 'Vancouver, BC', 
+                },
+            ]
+        } else if (postedAfter === '' & salary === null) {
+            window.alert("Applying filters with location = " + location)
+            filteredJobs = [
+                {
+                    'jobID': 1,
+                    'position': 'Software Engineer',
+                    'postedDate': '23rd March, 2023',
+                    'location': 'Vancouver, BC', 
+                },
+            ]
+        } else if (location === null && salary === null) {
+            window.alert("Applying filters with postedAfter = " + postedAfter)
+            filteredJobs = [
+                {
+                    'jobID': 1,
+                    'position': 'Software Engineer',
+                    'postedDate': '23rd March, 2023',
+                    'location': 'Vancouver, BC', 
+                },
+            ]
+        } 
+
+        this.setState({
+            jobs: filteredJobs
+        })
+
     }
 
     handleGoBack = () => {
         this.setState({
             isSeeingJob: false, 
             selectedJob: null
+        })
+    }
+
+    handleClearFilters = () => {
+        this.setState({
+            jobs: this.state.allJobs
         })
     }
 
@@ -70,6 +124,7 @@ class CompanyPostedJobs extends Component {
                 </div>
                 <FilterBar
                     handleApplyFilters={this.handleApplyFilters}
+                    handleClearFilters={this.handleClearFilters}
                 ></FilterBar>
                 <div>
                     {

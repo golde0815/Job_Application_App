@@ -69,17 +69,38 @@ class Companies extends Component {
         })
     }
 
-    handleApplyFilters = (minRating) => {
-        // TODO: (Aggregation with HAVING requirement) - get all companies with rating higher 
-        // than minimum rating given by user 
-        const highRatedCompanies = [{
-            'companyID': 5,
-            'name': 'Microsoft',
-            'rating': '4'
-        }]
+    handleApplyFilters = (postedAfter, minRating) => {
+        // TODO: (minRating = Aggregation with HAVING requirement) - get all companies with rating higher  than minimum rating given by user 
+        // TODO: (postedAfter = JOIN requirement ) - get all companies that have a postedJob posted after given date
+
+        var filteredCompanies = []
+
+        if (postedAfter === '' && minRating === null) {
+            filteredCompanies = this.state.allCompanies
+        } else if (postedAfter === '') {
+            window.alert("Applying filters with minRating = " + minRating)
+            filteredCompanies = [{
+                'companyID': 5,
+                'name': 'Microsoft',
+                'rating': '4'
+            }]
+        } else if (minRating === null) {
+            window.alert("Applying filters with postedAfter = " + postedAfter)
+            filteredCompanies = [{
+                'companyID': 5,
+                'name': 'Microsoft',
+                'rating': '4'
+            }]
+        }
 
         this.setState({
-            companies: highRatedCompanies
+            companies: filteredCompanies
+        })
+    }
+
+    handleClearFilters = () => {
+        this.setState({
+            companies: this.state.allCompanies
         })
     }
 
@@ -89,10 +110,11 @@ class Companies extends Component {
         <div>
             <div>
                 <div className="page-header">
-                    <h2>Posted Jobs</h2>
+                    <h2>Companies</h2>
                 </div>
                 <FilterBar
                     handleApplyFilters={this.handleApplyFilters}
+                    handleClearFilters={this.handleClearFilters}
                 ></FilterBar>
                 <p className="user-job-number-applied">Top Companies: {this.state.topCompanies.map(company => `${company.name}, `)}</p>
                 <div>
