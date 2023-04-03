@@ -54,7 +54,12 @@ public class PostedJobDao {
     }
 
     public List<PostedJob> selectPostedJob(String attribute, String value) {
-        String query = "SELECT * FROM POSTED_JOB WHERE " + attribute + " = ?";
+        String query = "SELECT * FROM POSTED_JOB WHERE " + attribute;
+        if (attribute.equals("salary")) {
+            query = query + " >= ?";
+        } else {
+            query = query + " = ?";
+        }
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ArrayList<PostedJob> result = new ArrayList<>();
             setPreparedStatementParameter(ps, 1, attribute, value);
