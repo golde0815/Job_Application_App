@@ -1,11 +1,11 @@
 package ca.ubc.cs304.database.model;
 
-public final class ParseUpdateJson {
+public final class UpdatePostedJob {
     private String attribute;
     private int jobId;
     private String value;
 
-    public ParseUpdateJson(String attribute, int jobId, String value) {
+    public UpdatePostedJob(String attribute, int jobId, String value) {
         this.attribute = attribute;
         this.jobId = jobId;
         this.value = value;

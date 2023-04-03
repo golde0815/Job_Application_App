@@ -1,12 +1,14 @@
 package ca.ubc.cs304.database.dao;
 
 import ca.ubc.cs304.database.model.Company;
-import ca.ubc.cs304.database.model.ParseDeleteJson;
+import ca.ubc.cs304.database.model.DeleteCompany;
 import ca.ubc.cs304.database.model.TopCompany;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -17,11 +19,11 @@ public class CompanyDao {
         this.connection = connection;
     }
 
-    public void deleteCompany(ParseDeleteJson parseDeleteJson) {
+    public void deleteCompany(DeleteCompany deleteCompany) {
         try {
-            System.out.println(parseDeleteJson);
+            System.out.println(deleteCompany);
             PreparedStatement ps = connection.prepareStatement("DELETE FROM COMPANY WHERE company_id = ?");
-            ps.setInt(1, parseDeleteJson.getId());
+            ps.setInt(1, deleteCompany.getCompany_id());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
