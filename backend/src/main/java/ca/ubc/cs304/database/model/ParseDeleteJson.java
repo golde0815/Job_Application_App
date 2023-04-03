@@ -1,20 +1,20 @@
 package ca.ubc.cs304.database.model;
 
 public final class ParseDeleteJson {
-    private int jobId;
+    private int id;
 
     public ParseDeleteJson () {
 
     }
-    public ParseDeleteJson (int jobId) {
-        this.jobId = jobId;
+    public ParseDeleteJson (int id) {
+        this.id = id;
     }
 
-    public int getJobId() {
-        return jobId;
+    public int getId() {
+        return id;
     }
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
+    public void setId(int id) {
+        this.id = id;
     }
 }

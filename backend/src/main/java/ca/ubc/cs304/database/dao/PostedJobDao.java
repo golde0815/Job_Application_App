@@ -140,7 +140,7 @@ public class PostedJobDao {
         try {
             System.out.println(parseDeleteJson);
             PreparedStatement ps = connection.prepareStatement("DELETE FROM POSTED_JOB WHERE job_id = ?");
-            ps.setInt(1, parseDeleteJson.getJobId());
+            ps.setInt(1, parseDeleteJson.getId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
