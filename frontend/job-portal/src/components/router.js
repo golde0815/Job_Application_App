@@ -7,6 +7,7 @@ import CompanyProfile from './pages/companyProfile/companyProfile';
 import CompanyPostedJobs from './pages/companyPostedJobs/companyPostedJobs';
 import PostNewJob from './pages/postNewJob/postNewJob';
 import UserPostedJobs from './pages/userPostedJobs/userPostedJobs';
+import Companies from './pages/companies/companies';
 
 class RouterComponent extends Component {
   render() {
@@ -20,6 +21,7 @@ class RouterComponent extends Component {
                 <Route path="/companyPostedJobs" element={<CompanyPostedJobs />} />
                 <Route path="/postNewJob" element={<PostNewJob />} />
                 <Route path="/userPostedJobs" element={<UserPostedJobs />} />
+                <Route path="/companies" element={<Companies />} />
             </Routes>
         </Router>
     )
