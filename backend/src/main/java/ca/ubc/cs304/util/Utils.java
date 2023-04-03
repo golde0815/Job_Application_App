@@ -1,6 +1,6 @@
 package ca.ubc.cs304.util;
 
-import ca.ubc.cs304.database.model.PostedJob;
+import ca.ubc.cs304.database.model.CreatePostedJob;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -60,12 +60,12 @@ public class Utils {
     /**
      * Validates that a PostedJob is valid.
      *
-     * @param postedJob the PostedJob to validate
+     * @param createPostedJob the PostedJob to validate
      * @throws IllegalArgumentException if the PostedJob is invalid
      */
-    public static void validatePostedJob(PostedJob postedJob) {
-        validateNotBlank(postedJob.getPosition(), "position");
-        validateNotBlank(postedJob.getLocation(), "location");
-        validateNotBlank(postedJob.getDescription(), "description");
+    public static void validateCreatePostedJob(CreatePostedJob createPostedJob) {
+        validateNotBlank(createPostedJob.getPosition(), "position");
+        validateNotBlank(createPostedJob.getLocation(), "location");
+        validateNotBlank(createPostedJob.getDescription(), "description");
     }
 }

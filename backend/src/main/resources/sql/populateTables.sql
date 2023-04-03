@@ -170,6 +170,8 @@ INSERT INTO USER_APPLIES_TO (EMAIL, JOB_ID, APPLIED_DATE)
 VALUES ('bobjohnson@gmail.com', 4, '2019-01-07');
 INSERT INTO USER_APPLIES_TO (EMAIL, JOB_ID, APPLIED_DATE)
 VALUES ('bobjohnson@gmail.com', 5, '2019-01-07');
+INSERT INTO USER_APPLIES_TO (EMAIL, JOB_ID, APPLIED_DATE)
+VALUES ('janedoe@gmail.com', 5, '2019-01-08');
 
 INSERT INTO RESUME (EMAIL, DOCUMENT_ID, URL)
 VALUES ('janedoe@gmail.com', 1, 'https://www.example.com/1');

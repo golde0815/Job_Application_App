@@ -1,9 +1,10 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.dao.PostedJobDao;
+import ca.ubc.cs304.database.model.CreatePostedJob;
+import ca.ubc.cs304.database.model.PostedJob;
 import ca.ubc.cs304.database.model.ResponseMessage;
 import ca.ubc.cs304.database.model.UpdatePostedJob;
-import ca.ubc.cs304.database.model.PostedJob;
 import ca.ubc.cs304.exception.GenericSQLException;
 import ca.ubc.cs304.util.Utils;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,10 +32,10 @@ public class PostedJobController {
     // 1. INSERT
     @PostMapping("/jobs")
     @ResponseBody
-    private ResponseMessage createPostedJob(@RequestBody PostedJob postedJob) {
+    private ResponseMessage createPostedJob(@RequestBody CreatePostedJob createPostedJob) {
         try {
-            Utils.validatePostedJob(postedJob);
-            postedJobDao.createPostedJob(postedJob);
+            Utils.validateCreatePostedJob(createPostedJob);
+            postedJobDao.createPostedJob(createPostedJob);
             return new ResponseMessage("OK");
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -46,9 +47,14 @@ public class PostedJobController {
     // 4. SELECT
     @GetMapping("/jobs")
     @ResponseBody
-    private List<PostedJob> selectPostedJob(@RequestParam String attribute, @RequestParam String value) {
+    private List<PostedJob> selectPostedJob(@RequestParam(required = false) String attribute,
+                                            @RequestParam(required = false) String value) {
         try {
-            return postedJobDao.selectPostedJob(attribute, value);
+            if (attribute == null || value == null) {
+                return postedJobDao.getAllPostedJobs();
+            } else {
+                return postedJobDao.selectPostedJob(attribute, value);
+            }
         } catch (GenericSQLException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
         }

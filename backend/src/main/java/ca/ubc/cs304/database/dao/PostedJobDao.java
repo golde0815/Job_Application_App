@@ -1,5 +1,6 @@
 package ca.ubc.cs304.database.dao;
 
+import ca.ubc.cs304.database.model.CreatePostedJob;
 import ca.ubc.cs304.database.model.PostedJob;
 import ca.ubc.cs304.database.model.UpdatePostedJob;
 import ca.ubc.cs304.exception.GenericSQLException;
@@ -11,12 +12,14 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -27,28 +30,56 @@ public class PostedJobDao {
         this.connection = connection;
     }
 
-    public void createPostedJob(PostedJob postedJob) {
-        postedJob.setJobId(Utils.generateRandomNumber());
+    public void createPostedJob(CreatePostedJob createPostedJob) {
         try (PreparedStatement ps = connection.prepareStatement("INSERT INTO POSTED_JOB VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
-            ps.setInt(1, postedJob.getJobId());
-            ps.setInt(2, postedJob.getCompanyId());
+            ps.setInt(1, Utils.generateRandomNumber());
+            ps.setInt(2, createPostedJob.getCompanyId());
             ps.setDate(3, Date.valueOf(LocalDate.now()));
-            ps.setString(4, postedJob.getPosition());
-            ps.setString(5, postedJob.getLocation());
-            ps.setString(6, postedJob.getDescription());
-            if (postedJob.getSalary() == 0) {
+            ps.setString(4, createPostedJob.getPosition());
+            ps.setString(5, createPostedJob.getLocation());
+            ps.setString(6, createPostedJob.getDescription());
+            if (createPostedJob.getSalary() == 0) {
                 ps.setNull(7, java.sql.Types.INTEGER);
             } else {
-                ps.setInt(7, postedJob.getSalary());
+                ps.setInt(7, createPostedJob.getSalary());
             }
-            if (postedJob.getRecruiterEmail() == null) {
+            if (createPostedJob.getRecruiterEmail() == null) {
                 ps.setNull(8, java.sql.Types.VARCHAR);
             } else {
-                ps.setString(8, postedJob.getRecruiterEmail());
+                ps.setString(8, createPostedJob.getRecruiterEmail());
             }
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Create posted job failed: " + e.getMessage());
+            throw new GenericSQLException(e);
+        }
+    }
+
+    public List<PostedJob> getAllPostedJobs() {
+        String query = "SELECT P.JOB_ID AS JOB_ID, COMPANY_ID, POSTED_DATE, " +
+                "POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL, NUM_APPLICANTS FROM " +
+                "(SELECT JOB_ID, COUNT(email) AS NUM_APPLICANTS " +
+                "FROM USER_APPLIES_TO " +
+                "GROUP BY JOB_ID) T RIGHT OUTER JOIN POSTED_JOB P ON T.JOB_ID = P.JOB_ID";
+        try (Statement stmt = connection.createStatement()) {
+            List<PostedJob> result = new ArrayList<>();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                PostedJob model = new PostedJob(rs.getInt("job_id"),
+                        rs.getInt("company_id"),
+                        rs.getDate("posted_date").toLocalDate(),
+                        rs.getString("position"),
+                        rs.getString("location"),
+                        rs.getString("description"),
+                        rs.getInt("salary"),
+                        rs.getString("recruiter_email"),
+                        Optional.of(rs.getInt("num_applicants")));
+                result.add(model);
+            }
+            rs.close();
+            return result;
+        } catch (SQLException e) {
+            System.err.println("Get all posted jobs failed: " + e.getMessage());
             throw new GenericSQLException(e);
         }
     }
