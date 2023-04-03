@@ -6,15 +6,18 @@ public final class PostedJob {
     private int jobId;
     private int companyId;
     private LocalDate postedDate;
+    private String position;
     private String location;
     private String description;
     private int salary;
     private String recruiterEmail;
-    public PostedJob(int jobId, int companyId, LocalDate postedDate, String location, String description,
+
+    public PostedJob(int jobId, int companyId, LocalDate postedDate, String position, String location, String description,
                      int salary, String recruiterEmail) {
         this.jobId = jobId;
         this.companyId = companyId;
         this.postedDate = postedDate;
+        this.position = position;
         this.location = location;
         this.description = description;
         this.salary = salary;
@@ -43,6 +46,14 @@ public final class PostedJob {
 
     public void setPostedDate(LocalDate postedDate) {
         this.postedDate = postedDate;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getLocation() {

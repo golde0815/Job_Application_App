@@ -1,11 +1,14 @@
 package ca.ubc.cs304.controller;
 
-import ca.ubc.cs304.database.dao.DatabaseConnectionHandler;
 import ca.ubc.cs304.database.dao.PostedJobDao;
-import ca.ubc.cs304.database.model.ParseDeleteJson;
-import ca.ubc.cs304.database.model.ParseUpdateJson;
+import ca.ubc.cs304.database.model.UpdatePostedJob;
 import ca.ubc.cs304.database.model.PostedJob;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -17,35 +20,29 @@ public class PostedJobController {
         this.postedJobDao = postedJobDao;
     }
 
+    // 1. INSERT
     @PostMapping("/jobs")
     private String createPostedJob(@RequestBody PostedJob postedJob) {
-        System.out.println(postedJob);
         postedJobDao.createPostedJob(postedJob);
         return "OK";
     }
 
+    // 4. SELECT
     @GetMapping("/jobs")
     private PostedJob[] selectPostedJob() {
-        // postedJobDao.selectPostedJob();
-        // return "OK";
         return postedJobDao.selectPostedJob();
     }
+
     @GetMapping("/jobs/{column}")
     private Map<String, Object>[] projectPostedJob(@PathVariable String column) {
         return postedJobDao.projectPostedJob(column);
         // return "OK";
     }
 
-
+    // 3. UPDATE
     @PatchMapping("/jobs")
-    private String updatePostedJob(@RequestBody ParseUpdateJson parseUpdateJson) {
-        postedJobDao.updatePostedJob(parseUpdateJson);
-        return "OK";
-    }
-
-    @DeleteMapping("/jobs")
-    private String deletePostedJob(@RequestBody ParseDeleteJson parseDeleteJson) {
-        postedJobDao.deletePostedJob(parseDeleteJson);
+    private String updatePostedJob(@RequestBody UpdatePostedJob updatePostedJob) {
+        postedJobDao.updatePostedJob(updatePostedJob);
         return "OK";
     }
 }

@@ -15,6 +15,7 @@ public class CompanyController {
         this.companyDao = companyDao;
     }
 
+    // 6. JOIN
     @GetMapping("/company/{postedDate}")
     private Company[] selectCompanyPostedJob(@PathVariable LocalDate postedDate) {
         return companyDao.selectCompanyPostedJob(postedDate);

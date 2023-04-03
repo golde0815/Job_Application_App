@@ -2,10 +2,12 @@ package ca.ubc.cs304.database.dao;
 
 import ca.ubc.cs304.database.model.Company;
 import ca.ubc.cs304.database.model.TopCompany;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 

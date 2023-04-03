@@ -1,11 +1,9 @@
 package ca.ubc.cs304.database.dao;
 
-import ca.ubc.cs304.database.model.ParseDeleteJson;
-import ca.ubc.cs304.database.model.ParseUpdateJson;
+import ca.ubc.cs304.database.model.UpdatePostedJob;
 import ca.ubc.cs304.database.model.PostedJob;
 import ca.ubc.cs304.util.NumberUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.sql.*;
 import java.sql.Date;
@@ -49,12 +47,14 @@ public class PostedJobDao {
     public PostedJob[] selectPostedJob() {
         ArrayList<PostedJob> result = new ArrayList<>();
         try {
+            // TODO: add WHERE clause
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM POSTED_JOB");
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 PostedJob model = new PostedJob(rs.getInt("job_id"),
                                                 rs.getInt("company_id"),
                                                 rs.getDate("posted_date").toLocalDate(),
+                                                rs.getString("position"),
                                                 rs.getString("location"),
                                                 rs.getString("description"),
                                                 rs.getInt("salary"),
@@ -91,40 +91,40 @@ public class PostedJobDao {
         return result.toArray(new Map[result.size()]);
      }
 
-    public void updatePostedJob(ParseUpdateJson parseUpdateJson) {
+    public void updatePostedJob(UpdatePostedJob updatePostedJob) {
         try {
             // System.out.println(jobId);
             PreparedStatement ps;
-            switch (parseUpdateJson.getAttribute()) {
+            switch (updatePostedJob.getAttribute()) {
                 case "companyId":
                     ps = connection.prepareStatement("UPDATE POSTED_JOB SET company_id = ?  WHERE job_id = ?");
-                    ps.setInt(1, Integer.parseInt(parseUpdateJson.getValue()));
-                    ps.setInt(2, parseUpdateJson.getJobId());
+                    ps.setInt(1, Integer.parseInt(updatePostedJob.getValue()));
+                    ps.setInt(2, updatePostedJob.getJobId());
                     break;
                 case "postedDate":
                     ps = connection.prepareStatement("UPDATE POSTED_JOB SET posted_date = ?  WHERE job_id = ?");
-                    ps.setDate(1, Date.valueOf(parseUpdateJson.getValue()));
-                    ps.setInt(2, parseUpdateJson.getJobId());
+                    ps.setDate(1, Date.valueOf(updatePostedJob.getValue()));
+                    ps.setInt(2, updatePostedJob.getJobId());
                     break;
                 case "location":
                     ps = connection.prepareStatement("UPDATE POSTED_JOB SET location = ?  WHERE job_id = ?");
-                    ps.setString(1, parseUpdateJson.getValue());
-                    ps.setInt(2, parseUpdateJson.getJobId());
+                    ps.setString(1, updatePostedJob.getValue());
+                    ps.setInt(2, updatePostedJob.getJobId());
                     break;
                 case "description":
                     ps = connection.prepareStatement("UPDATE POSTED_JOB SET description = ?  WHERE job_id = ?");
-                    ps.setString(1, parseUpdateJson.getValue());
-                    ps.setInt(2, parseUpdateJson.getJobId());
+                    ps.setString(1, updatePostedJob.getValue());
+                    ps.setInt(2, updatePostedJob.getJobId());
                     break;
                 case "salary":
                     ps = connection.prepareStatement("UPDATE POSTED_JOB SET salary = ?  WHERE job_id = ?");
-                    ps.setInt(1, Integer.parseInt(parseUpdateJson.getValue()));
-                    ps.setInt(2, parseUpdateJson.getJobId());
+                    ps.setInt(1, Integer.parseInt(updatePostedJob.getValue()));
+                    ps.setInt(2, updatePostedJob.getJobId());
                     break;
                 case "recruiterEmail":
                     ps = connection.prepareStatement("UPDATE POSTED_JOB SET recruiterEmail = ?  WHERE job_id = ?");
-                    ps.setString(1, parseUpdateJson.getValue());
-                    ps.setInt(2, parseUpdateJson.getJobId());
+                    ps.setString(1, updatePostedJob.getValue());
+                    ps.setInt(2, updatePostedJob.getJobId());
                     break;
                 default:
                     return;
@@ -133,18 +133,6 @@ public class PostedJobDao {
             ps.close();
         } catch (SQLException e) {
             System.err.println("Update posted job failed: " + e.getMessage());
-        }
-    }
-
-    public void deletePostedJob(ParseDeleteJson parseDeleteJson) {
-        try {
-            System.out.println(parseDeleteJson);
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM POSTED_JOB WHERE job_id = ?");
-            ps.setInt(1, parseDeleteJson.getJobId());
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            System.err.println("Delete posted job failed: " + e.getMessage());
         }
     }
 }
