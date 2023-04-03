@@ -5,53 +5,57 @@ import ViewToggle from "./viewToggle";
 
 class MenuBar extends Component {
   state = {
-    isUserView: true 
+    view: 'Company' 
   }
 
-  handleViewToggle = () => {
-    this.setState(prevState => ({
-      isUserView: !prevState.isUserView 
+  handleViewToggle = (view) => {
+    this.setState(() => ({
+      view: view
     }));
   };
 
   render() {
-    const isUserView = this.state.isUserView
-
-      return (
-      <header className="menubar-container">
-        <div className="menubar-left">
-          <h1 className="menubar-title">MyJobPortal</h1>
-          <ViewToggle 
-            isUserView={isUserView}
-            handleViewToggle={this.handleViewToggle}
-          />
-        </div>
-        <nav>
-          <ul className="nav-list">
-            {isUserView && 
-              <li className="nav-item">
-                <Link to="/userPostedJobs">Jobs</Link>
-              </li>
-            }
-            {!isUserView &&
-              <li className="nav-item">
-                <Link to="/companyProfile">CompanyProfile</Link>
-              </li>
-            }
-            {!isUserView &&
-              <li className="nav-item">
-                <Link to="/postNewJob">Post a Job</Link>
-              </li>
-            }
-            {isUserView && 
-              <li className="nav-item">
-                <a href="/companies">Companies</a>
-              </li>
-            }
-          </ul>
-        </nav>
+    const { view } = this.state
+  
+    return (
+    <header className="menubar-container">
+      <div className="menubar-left">
+        <h1 className="menubar-title">MyJobPortal</h1>
+        <ViewToggle 
+          handleViewToggle={this.handleViewToggle}
+        />
+      </div>
+      <nav>
+        <ul className="nav-list">
+          {view === "USER" && 
+            <li className="nav-item">
+              <Link to="/userPostedJobs">Jobs</Link>
+            </li>
+          }
+          {view === "COMPANY" &&
+            <li className="nav-item">
+              <Link to="/companyProfile">CompanyProfile</Link>
+            </li>
+          }
+          {view === "COMPANY" &&
+            <li className="nav-item">
+              <Link to="/postNewJob">Post a Job</Link>
+            </li>
+          }
+          {view === "USER" && 
+            <li className="nav-item">
+              <a href="/companies">Companies</a>
+            </li>
+          }
+          {view === "ADMIN" && 
+            <li className="nav-item">
+              <a href="/admin">Admin</a>
+            </li>
+          }
+        </ul>
+      </nav>
     </header>
-  );
+    );
   }
 };
 

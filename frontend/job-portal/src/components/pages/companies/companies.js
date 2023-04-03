@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import FilterBar from "./filterBar";
 
 class Companies extends Component {
     constructor(props) {
@@ -68,6 +69,19 @@ class Companies extends Component {
         })
     }
 
+    handleApplyFilters = (minRating) => {
+        // TODO: (Aggregation with HAVING requirement) - get all companies with rating higher 
+        // than minimum rating given by user 
+        const highRatedCompanies = [{
+            'companyID': 5,
+            'name': 'Microsoft',
+            'rating': '4'
+        }]
+
+        this.setState({
+            companies: highRatedCompanies
+        })
+    }
 
   render() {
 
@@ -77,12 +91,15 @@ class Companies extends Component {
                 <div className="page-header">
                     <h2>Posted Jobs</h2>
                 </div>
+                <FilterBar
+                    handleApplyFilters={this.handleApplyFilters}
+                ></FilterBar>
                 <p className="user-job-number-applied">Top Companies: {this.state.topCompanies.map(company => `${company.name}, `)}</p>
                 <div>
                     {
                         this.state.companies.map((company, index) => (
                             
-                            <button className="posted-job" onClick={() => this.handleClickCompany(company.companyID)}>
+                            <button className="posted-job">
                                 <p className="posted-job-index">{index+1}</p>
                                 <p className="posted-job-name">{company.companyID}:{company.name}</p>
                                 <p className="posted-job-date">Rating: {company.rating}/5</p>
