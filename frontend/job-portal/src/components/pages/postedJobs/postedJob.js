@@ -16,17 +16,6 @@ class PostedJob extends Component {
             'category': 'Software',
             'skill': 'Python',
             isEdit: false,
-
-
-            'positionTemp': 'Software Engineer',
-            'postedDateTemp': '23rd March, 2023',
-            'locationTemp': 'Vancouver, BC',
-            'descriptionTemp': 'You will need to be build a job portal',
-            'salaryTemp': 10000,
-            'recruiterEmailTemp': 'recruiter@gmail.com',
-            'categoryTemp': 'Software',
-            'skillTemp': 'Python',
-
         }
     }
 
@@ -43,8 +32,7 @@ class PostedJob extends Component {
         }), () => {
             if(!this.state.isEdit) {
                 // TODO: UPDATE posted job
-                // on success, refresh the page to update values
-                window.alert(this.state['posted-job-description'])
+                window.alert(this.state['posted-job-description'] || this.state.description)
 
                 window.alert('Job Posting has been updated')
                 

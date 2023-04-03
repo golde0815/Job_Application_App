@@ -43,6 +43,11 @@ class MenuBar extends Component {
                 <Link to="/companyProfile">CompanyProfile</Link>
               </li>
             }
+            {!isUserView &&
+              <li className="nav-item">
+                <Link to="/postNewJob">Post a Job</Link>
+              </li>
+            }
             {isUserView && 
               <li className="nav-item">
                 <a href="/companies">Companies</a>
