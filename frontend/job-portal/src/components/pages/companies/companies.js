@@ -7,8 +7,6 @@ class Companies extends Component {
         this.state = {
             allCompanies: [],
             companies: [],
-            isSeeingCompany: false,
-            selectedCompany: null,
             topCompanies:[]
         }
 
@@ -63,13 +61,6 @@ class Companies extends Component {
 
     }
 
-    handleClickCompany = (companyID) => {
-        this.setState(prevState => ({
-            isSeeingCompany: !prevState.isSeeingCompany,
-            selectedCompany: companyID
-        }))
-    }
-
     handleGoBack = () => {
         this.setState({
             isSeeingCompany: false, 
@@ -82,8 +73,6 @@ class Companies extends Component {
 
     return (
         <div>
-        {
-            !this.state.isSeeingCompany &&
             <div>
                 <div className="page-header">
                     <h2>Posted Jobs</h2>
@@ -103,15 +92,6 @@ class Companies extends Component {
 
                 </div>
             </div>
-        }
-        {/* {
-            this.state.isSeeingCompany && 
-                <UserPostedJob
-                    jobID={this.state.selectedCompany}
-                    handleGoBack={this.handleGoBack}
-                ></UserPostedJob>
-
-        } */}
         </div>
         
     );
