@@ -22,7 +22,7 @@ public class MigrationHandler {
     private final Connection connection;
     private final ResourceLoader resourceLoader;
 
-    public MigrationHandler(Connection connection, ResourceLoader resourceLoader) throws SQLException {
+    public MigrationHandler(Connection connection, ResourceLoader resourceLoader) {
         this.connection = connection;
         this.resourceLoader = resourceLoader;
     }
@@ -43,7 +43,6 @@ public class MigrationHandler {
     private void executeSqlFile(String filePath) {
         Resource resource = resourceLoader.getResource(filePath);
         if (!resource.exists()) {
-            // TODO: throw exception instead
             System.err.println("Error opening SQL file: " + filePath + " file not found");
             return;
         }

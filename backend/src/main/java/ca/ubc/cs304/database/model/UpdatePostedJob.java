@@ -1,37 +1,8 @@
 package ca.ubc.cs304.database.model;
 
-public final class UpdatePostedJob {
-    private String attribute;
-    private int jobId;
-    private String value;
+import java.util.List;
 
-    public UpdatePostedJob(String attribute, int jobId, String value) {
-        this.attribute = attribute;
-        this.jobId = jobId;
-        this.value = value;
-    }
-
-    public String getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
-    }
-
-    public int getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+public record UpdatePostedJob(List<toUpdateFields> toUpdate, int jobId) {
+    public record toUpdateFields(String attribute, String value) {
     }
 }

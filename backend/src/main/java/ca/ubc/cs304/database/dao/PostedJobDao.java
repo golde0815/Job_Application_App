@@ -1,46 +1,54 @@
 package ca.ubc.cs304.database.dao;
 
-import ca.ubc.cs304.database.model.UpdatePostedJob;
 import ca.ubc.cs304.database.model.PostedJob;
-import ca.ubc.cs304.util.NumberUtils;
+import ca.ubc.cs304.database.model.UpdatePostedJob;
+import ca.ubc.cs304.exception.GenericSQLException;
+import ca.ubc.cs304.util.Utils;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.Connection;
 import java.sql.Date;
-import java.util.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 public class PostedJobDao {
     private final Connection connection;
-    public PostedJobDao(Connection connection) throws SQLException {
+
+    public PostedJobDao(Connection connection) {
         this.connection = connection;
     }
 
     public void createPostedJob(PostedJob postedJob) {
-        postedJob.setJobId(NumberUtils.generateRandomNumber());
-        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO POSTED_JOB VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+        postedJob.setJobId(Utils.generateRandomNumber());
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO POSTED_JOB VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
             ps.setInt(1, postedJob.getJobId());
             ps.setInt(2, postedJob.getCompanyId());
-            if (postedJob.getPostedDate() == null) {
-                ps.setNull(3, java.sql.Types.DATE);
-            } else {
-                ps.setDate(3, java.sql.Date.valueOf(postedJob.getPostedDate()));
-            }
-            ps.setString(4, postedJob.getLocation());
-            ps.setString(5, postedJob.getDescription());
+            ps.setDate(3, Date.valueOf(LocalDate.now()));
+            ps.setString(4, postedJob.getPosition());
+            ps.setString(5, postedJob.getLocation());
+            ps.setString(6, postedJob.getDescription());
             if (postedJob.getSalary() == 0) {
-                ps.setNull(6, java.sql.Types.INTEGER);
+                ps.setNull(7, java.sql.Types.INTEGER);
             } else {
-                ps.setInt(6, postedJob.getSalary());
+                ps.setInt(7, postedJob.getSalary());
             }
             if (postedJob.getRecruiterEmail() == null) {
-                ps.setNull(7, java.sql.Types.VARCHAR);
+                ps.setNull(8, java.sql.Types.VARCHAR);
             } else {
-                ps.setString(7, postedJob.getRecruiterEmail());
+                ps.setString(8, postedJob.getRecruiterEmail());
             }
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Create posted job failed: " + e.getMessage());
+            throw new GenericSQLException(e);
         }
     }
 
@@ -50,15 +58,16 @@ public class PostedJobDao {
             // TODO: add WHERE clause
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM POSTED_JOB");
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
-                PostedJob model = new PostedJob(rs.getInt("job_id"),
-                                                rs.getInt("company_id"),
-                                                rs.getDate("posted_date").toLocalDate(),
-                                                rs.getString("position"),
-                                                rs.getString("location"),
-                                                rs.getString("description"),
-                                                rs.getInt("salary"),
-                                                rs.getString("recruiter_email"));
+            while (rs.next()) {
+                PostedJob model = new PostedJob(
+                        rs.getInt("job_id"),
+                        rs.getInt("company_id"),
+                        rs.getDate("posted_date").toLocalDate(),
+                        rs.getString("position"),
+                        rs.getString("location"),
+                        rs.getString("description"),
+                        rs.getInt("salary"),
+                        rs.getString("recruiter_email"));
                 result.add(model);
             }
             rs.close();
@@ -89,50 +98,66 @@ public class PostedJobDao {
             System.err.println("project posted job failed: " + e.getMessage());
         }
         return result.toArray(new Map[result.size()]);
-     }
+    }
 
     public void updatePostedJob(UpdatePostedJob updatePostedJob) {
-        try {
-            // System.out.println(jobId);
-            PreparedStatement ps;
-            switch (updatePostedJob.getAttribute()) {
-                case "companyId":
-                    ps = connection.prepareStatement("UPDATE POSTED_JOB SET company_id = ?  WHERE job_id = ?");
-                    ps.setInt(1, Integer.parseInt(updatePostedJob.getValue()));
-                    ps.setInt(2, updatePostedJob.getJobId());
-                    break;
-                case "postedDate":
-                    ps = connection.prepareStatement("UPDATE POSTED_JOB SET posted_date = ?  WHERE job_id = ?");
-                    ps.setDate(1, Date.valueOf(updatePostedJob.getValue()));
-                    ps.setInt(2, updatePostedJob.getJobId());
-                    break;
-                case "location":
-                    ps = connection.prepareStatement("UPDATE POSTED_JOB SET location = ?  WHERE job_id = ?");
-                    ps.setString(1, updatePostedJob.getValue());
-                    ps.setInt(2, updatePostedJob.getJobId());
-                    break;
-                case "description":
-                    ps = connection.prepareStatement("UPDATE POSTED_JOB SET description = ?  WHERE job_id = ?");
-                    ps.setString(1, updatePostedJob.getValue());
-                    ps.setInt(2, updatePostedJob.getJobId());
-                    break;
-                case "salary":
-                    ps = connection.prepareStatement("UPDATE POSTED_JOB SET salary = ?  WHERE job_id = ?");
-                    ps.setInt(1, Integer.parseInt(updatePostedJob.getValue()));
-                    ps.setInt(2, updatePostedJob.getJobId());
-                    break;
-                case "recruiterEmail":
-                    ps = connection.prepareStatement("UPDATE POSTED_JOB SET recruiterEmail = ?  WHERE job_id = ?");
-                    ps.setString(1, updatePostedJob.getValue());
-                    ps.setInt(2, updatePostedJob.getJobId());
-                    break;
-                default:
-                    return;
+        StringBuilder sql = new StringBuilder("UPDATE POSTED_JOB SET ");
+        for (UpdatePostedJob.toUpdateFields field : updatePostedJob.toUpdate()) {
+            sql.append(field.attribute()).append(" = ?, ");
+        }
+        sql.delete(sql.length() - 2, sql.length());
+        sql.append(" WHERE job_id = ?");
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int index = 1;
+            for (UpdatePostedJob.toUpdateFields field : updatePostedJob.toUpdate()) {
+                setPreparedStatementParameter(ps, index, field);
+                index++;
             }
+            ps.setInt(index, updatePostedJob.jobId());
             ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
+        } catch (SQLException | IllegalArgumentException e) {
             System.err.println("Update posted job failed: " + e.getMessage());
+            throw new GenericSQLException(e);
+        }
+    }
+
+    private static void setPreparedStatementParameter(PreparedStatement ps, int index, UpdatePostedJob.toUpdateFields field)
+            throws SQLException {
+        switch (field.attribute()) {
+            case "company_id" -> {
+                Integer parsedValue = Utils.parseInt(field.value());
+                if (parsedValue == null) {
+                    throw new IllegalArgumentException("Invalid value for " + field.attribute() + ": " + field.value());
+                }
+                ps.setInt(index, parsedValue);
+            }
+            case "salary" -> {
+                Integer parsedValue = Utils.parseInt(field.value());
+                if (parsedValue == null) {
+                    ps.setNull(index, java.sql.Types.INTEGER);
+                } else {
+                    ps.setInt(index, parsedValue);
+                }
+            }
+            case "posted_date" -> {
+                LocalDate parsedValue = Utils.parseDate(field.value());
+                if (parsedValue == null) {
+                    throw new IllegalArgumentException("Invalid value for " + field.attribute() + ": " + field.value());
+                }
+                ps.setDate(index, Date.valueOf(parsedValue));
+            }
+            case "position", "location", "description" -> {
+                Utils.validateNotBlank(field.value(), field.attribute());
+                ps.setString(index, field.value());
+            }
+            case "recruiter_email" -> {
+                try {
+                    Utils.validateNotBlank(field.value(), field.attribute());
+                    ps.setString(index++, field.value());
+                } catch (IllegalArgumentException e) {
+                    ps.setNull(index, java.sql.Types.VARCHAR);
+                }
+            }
         }
     }
 }

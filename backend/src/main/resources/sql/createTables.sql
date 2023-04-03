@@ -76,7 +76,7 @@ CREATE TABLE posted_job
 (
     job_id          INTEGER,
     company_id      INTEGER       NOT NULL,
-    posted_date     DATE,
+    posted_date     DATE          NOT NULL,
     position        VARCHAR(255)  NOT NULL,
     location        VARCHAR(255)  NOT NULL,
     description     VARCHAR(2000) NOT NULL,

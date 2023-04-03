@@ -22,6 +22,7 @@ public class CompanyController {
         // return "OK";
     }
 
+    // 9. Nested Aggregation with GROUP BY
     @GetMapping("/topcompany")
     private TopCompany[] topRatedCompanies() {
         return companyDao.topRatedCompanies();
