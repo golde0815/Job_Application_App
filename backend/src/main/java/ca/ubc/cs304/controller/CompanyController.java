@@ -38,11 +38,14 @@ public class CompanyController {
         }
     }
 
-    // TODO: fix this
     // 6. JOIN
-    @GetMapping("/company")
-    private List<Company> selectCompanyPostedJob(@RequestParam LocalDate postedDate) {
-        return companyDao.selectCompanyPostedJob(postedDate);
+    @GetMapping("/companies/hiring")
+    private List<Company> selectCompanyPostedAfter(@RequestParam LocalDate postedAfter) {
+        try {
+            return companyDao.selectCompanyPostedAfter(postedAfter);
+        } catch (GenericSQLException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
+        }
     }
 
     // 8. Aggregation with HAVING

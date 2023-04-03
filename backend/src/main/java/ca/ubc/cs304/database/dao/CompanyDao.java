@@ -34,15 +34,17 @@ public class CompanyDao {
         }
     }
 
-    public List<Company> selectCompanyPostedJob(LocalDate postedDate) {
-        String query = "SELECT C.NAME, P.POSTED_DATE FROM POSTED_JOB P JOIN COMPANY C on P.COMPANY_ID = C.COMPANY_ID AND P.POSTED_DATE >= ?";
+    public List<Company> selectCompanyPostedAfter(LocalDate postedAfter) {
+        String query = "SELECT DISTINCT C.COMPANY_ID, C.NAME " +
+                "FROM POSTED_JOB P, COMPANY C " +
+                "WHERE P.COMPANY_ID = C.COMPANY_ID AND P.POSTED_DATE >= ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             List<Company> result = new ArrayList<>();
-            ps.setDate(1, Date.valueOf(postedDate));
+            ps.setDate(1, Date.valueOf(postedAfter));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Company model = new Company(rs.getString("name"),
-                        rs.getDate("posted_date").toLocalDate());
+                Company model = new Company(rs.getString("company_id"),
+                        rs.getString("name"));
                 result.add(model);
             }
             rs.close();

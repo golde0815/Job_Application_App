@@ -44,7 +44,7 @@ public class PostedJobController {
         }
     }
 
-    // 4. SELECT
+    // 4. SELECT and 7. Aggregation with GROUP BY
     @GetMapping("/jobs")
     @ResponseBody
     private List<PostedJob> selectPostedJob(@RequestParam(required = false) String attribute,
