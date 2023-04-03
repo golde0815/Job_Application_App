@@ -1,0 +1,15 @@
+.admin-run {
+    margin-top: 30px !important;
+    padding: 10px;
+    margin: 5px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 30px;
+    border-color: #338573;
+    background-color: #58dec18c;
+}
+
+.admin-run:hover {
+    background-color: #4dc3a98c;
+    cursor: pointer;
+}

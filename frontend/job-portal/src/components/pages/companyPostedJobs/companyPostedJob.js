@@ -24,9 +24,6 @@ class CompanyPostedJob extends Component {
     }
 
     handleToggleEdit = () => {
-        const salary = document.getElementById("posted-job-salary");
-        const position = document.getElementById("posted-job-position");
-
         this.setState((prevState) => ({
             isEdit: !prevState.isEdit
         }), () => {

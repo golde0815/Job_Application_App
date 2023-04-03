@@ -5,7 +5,7 @@ import ViewToggle from "./viewToggle";
 
 class MenuBar extends Component {
   state = {
-    view: 'Company' 
+    view: "USER" 
   }
 
   handleViewToggle = (view) => {
@@ -44,12 +44,12 @@ class MenuBar extends Component {
           }
           {view === "USER" && 
             <li className="nav-item">
-              <a href="/companies">Companies</a>
+              <Link to="/companies">Companies</Link>
             </li>
           }
           {view === "ADMIN" && 
             <li className="nav-item">
-              <a href="/admin">Admin</a>
+              <Link to="/admin">Admin</Link>
             </li>
           }
         </ul>
