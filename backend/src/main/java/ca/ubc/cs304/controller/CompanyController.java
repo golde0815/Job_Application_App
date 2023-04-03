@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class CompanyController {
@@ -38,13 +39,18 @@ public class CompanyController {
 
     // 6. JOIN
     @GetMapping("/company")
-    private Company[] selectCompanyPostedJob(@RequestParam LocalDate postedDate) {
+    private List<Company> selectCompanyPostedJob(@RequestParam LocalDate postedDate) {
+        System.out.println(postedDate);
         return companyDao.selectCompanyPostedJob(postedDate);
     }
 
     // 9. Nested Aggregation with GROUP BY
     @GetMapping("/topcompany")
-    private TopCompany[] topRatedCompanies() {
-        return companyDao.topRatedCompanies();
+    private List<TopCompany> topRatedCompanies() {
+        try {
+            return companyDao.topRatedCompanies();
+        } catch (GenericSQLException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
+        }
     }
 }

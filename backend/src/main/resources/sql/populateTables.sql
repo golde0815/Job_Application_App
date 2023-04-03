@@ -50,7 +50,7 @@ VALUES ('bobjohnson@gmail.com', 4, 7, 'I enjoyed working here');
 INSERT INTO RATES (EMAIL, COMPANY_ID, VALUE, R_COMMENT)
 VALUES ('tombrown@gmail.com', 4, 8, 'Good company');
 INSERT INTO RATES (EMAIL, COMPANY_ID, VALUE)
-VALUES ('tombrown@gmail.com', 5, 5);
+VALUES ('tombrown@gmail.com', 5, 7);
 
 INSERT INTO INDUSTRY (NAME)
 VALUES ('Technology');
@@ -98,7 +98,7 @@ VALUES ('andrewwilliams@gmail.com', 'Andrew Williams');
 
 INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
 VALUES (1, 2, '2019-01-01', 'Accountant', 'Vancouver',
-        'We are seeking a highly motivated and experienced accountant to join our finance team.', 700000,
+        'We are seeking a highly motivated and experienced accountant to join our finance team.', 130000,
         'jasonmiller@gmail.com');
 INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
 VALUES (2, 3, '2019-01-02', 'Investment Banker', 'Burnaby',
