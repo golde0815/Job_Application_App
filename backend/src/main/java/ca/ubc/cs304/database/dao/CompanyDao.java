@@ -21,8 +21,7 @@ public class CompanyDao {
 
     public void deleteCompany(DeleteCompany deleteCompany) {
         try {
-            System.out.println(deleteCompany);
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM COMPANY WHERE company_id = ?");
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM COMPANY WHERE COMPANY_ID = ?");
             ps.setInt(1, deleteCompany.getCompany_id());
             ps.executeUpdate();
             ps.close();

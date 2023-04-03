@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -28,8 +29,8 @@ public class PostedJobController {
     }
 
     // 4. SELECT
-    @GetMapping("/jobs/{attribute}/{value}")
-    private PostedJob[] selectPostedJob(@PathVariable String attribute, @PathVariable String value) {
+    @GetMapping("/jobs")
+    private PostedJob[] selectPostedJob(@RequestParam String attribute, @RequestParam String value) {
         return postedJobDao.selectPostedJob(attribute, value);
     }
 

@@ -48,17 +48,20 @@ public class PostedJobDao {
         ArrayList<PostedJob> result = new ArrayList<>();
         try {
             // TODO: add WHERE clause
-            String query = "SELECT * FROM POSTED_JOB WHERE ? = ?";
+            String query = "SELECT * FROM POSTED_JOB WHERE " + attribute + " = ?";
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, attribute);
-            if (attribute == "jobId" || attribute == "companyId" || attribute == "salary") {
-                ps.setInt(2, Integer.parseInt(value));
-            } else if (attribute == "position" || attribute == "description" || attribute == "location" || attribute == "recruiterEmail") {
-                ps.setString(2, value);
-            } else if (attribute == "postedDate") {
-                ps.setDate(2, Date.valueOf(value));
-            } else {
-                throw new SQLException();
+            switch (attribute) {
+                case "job_id", "company_id", "salary":
+                    ps.setInt(1,Integer.parseInt(value));
+                    break;
+                case "posted_date":
+                    ps.setDate(1, Date.valueOf(value));
+                    break;
+                case "location", "position", "description", "recruiter_email":
+                    ps.setString(1,value);
+                    break;
+                default:
+                    throw new SQLException("Invalid attribute name");
             }
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
