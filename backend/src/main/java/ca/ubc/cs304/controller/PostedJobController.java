@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,8 +44,8 @@ public class PostedJobController {
 
     // 4. SELECT
     @GetMapping("/jobs")
-    private PostedJob[] selectPostedJob() {
-        return postedJobDao.selectPostedJob();
+    private PostedJob[] selectPostedJob(@RequestParam String attribute, @RequestParam String value) {
+        return postedJobDao.selectPostedJob(attribute, value);
     }
 
     // 5. PROJECTION

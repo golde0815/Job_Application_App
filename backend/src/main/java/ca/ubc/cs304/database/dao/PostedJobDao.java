@@ -52,22 +52,35 @@ public class PostedJobDao {
         }
     }
 
-    public PostedJob[] selectPostedJob() {
+    public PostedJob[] selectPostedJob(String attribute, String value) {
         ArrayList<PostedJob> result = new ArrayList<>();
         try {
             // TODO: add WHERE clause
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM POSTED_JOB");
+            String query = "SELECT * FROM POSTED_JOB WHERE " + attribute + " = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            switch (attribute) {
+                case "job_id", "company_id", "salary":
+                    ps.setInt(1,Integer.parseInt(value));
+                    break;
+                case "posted_date":
+                    ps.setDate(1, Date.valueOf(value));
+                    break;
+                case "location", "position", "description", "recruiter_email":
+                    ps.setString(1,value);
+                    break;
+                default:
+                    throw new SQLException("Invalid attribute name");
+            }
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                PostedJob model = new PostedJob(
-                        rs.getInt("job_id"),
-                        rs.getInt("company_id"),
-                        rs.getDate("posted_date").toLocalDate(),
-                        rs.getString("position"),
-                        rs.getString("location"),
-                        rs.getString("description"),
-                        rs.getInt("salary"),
-                        rs.getString("recruiter_email"));
+            while(rs.next()) {
+                PostedJob model = new PostedJob(rs.getInt("job_id"),
+                                                rs.getInt("company_id"),
+                                                rs.getDate("posted_date").toLocalDate(),
+                                                rs.getString("position"),
+                                                rs.getString("location"),
+                                                rs.getString("description"),
+                                                rs.getInt("salary"),
+                                                rs.getString("recruiter_email"));
                 result.add(model);
             }
             rs.close();

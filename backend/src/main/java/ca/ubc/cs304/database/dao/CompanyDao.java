@@ -1,6 +1,7 @@
 package ca.ubc.cs304.database.dao;
 
 import ca.ubc.cs304.database.model.Company;
+import ca.ubc.cs304.database.model.DeleteCompany;
 import ca.ubc.cs304.database.model.TopCompany;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,17 @@ public class CompanyDao {
     private final Connection connection;
     public CompanyDao(Connection connection) {
         this.connection = connection;
+    }
+
+    public void deleteCompany(DeleteCompany deleteCompany) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM COMPANY WHERE COMPANY_ID = ?");
+            ps.setInt(1, deleteCompany.getCompany_id());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Delete Company failed: " + e.getMessage());
+        }
     }
     public Company[] selectCompanyPostedJob(LocalDate postedDate) {
         ArrayList<Company> result = new ArrayList<>();

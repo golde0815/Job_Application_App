@@ -37,9 +37,13 @@ public class UserAppliesToDao {
     public UserEmail[] appliedToAllJobsFrom(CompanyId companyId) {
         ArrayList<UserEmail> result = new ArrayList<>();
         try {
-            String query = "SELECT EMAIL FROM USER_ACCOUNT U WHERE NOT EXISTS (SELECT JOB_ID FROM POSTED_JOB P WHERE COMPANY_ID = ? AND NOT EXISTS (SELECT JOB_ID FROM USER_APPLIES_TO UA WHERE UA.EMAIL = U.EMAIL AND UA.JOB_ID = P.JOB_ID))";
+            String query = "SELECT EMAIL FROM USER_ACCOUNT U WHERE "
+            + "(NOT EXISTS (SELECT JOB_ID FROM POSTED_JOB P WHERE COMPANY_ID = ? AND "
+            + "NOT EXISTS (SELECT JOB_ID FROM USER_APPLIES_TO UA WHERE UA.EMAIL = U.EMAIL AND UA.JOB_ID = P.JOB_ID)))"
+            + "AND (EXISTS (SELECT COMPANY_ID FROM POSTED_JOB WHERE COMPANY_ID = ?))";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, companyId.getCompanyId());
+            ps.setInt(2, companyId.getCompanyId());
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 UserEmail model = new UserEmail(rs.getString("email"));
