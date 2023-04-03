@@ -47,11 +47,6 @@ class MenuBar extends Component {
               <Link to="/companies">Companies</Link>
             </li>
           }
-          {view === "ADMIN" && 
-            <li className="nav-item">
-              <Link to="/admin">Admin</Link>
-            </li>
-          }
         </ul>
       </nav>
     </header>
