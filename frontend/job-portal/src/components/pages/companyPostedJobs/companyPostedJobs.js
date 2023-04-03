@@ -52,7 +52,7 @@ class CompanyPostedJobs extends Component {
             !this.state.isSeeingJob &&
             <div>
                 <div className="page-header">
-                    <h2>Posted Jobs</h2>
+                    <h2>Company Posted Jobs</h2>
                 </div>
                 <div className="posted-job-staruser">
                     <p>Users that have applied to all jobs: {this.state.starUser}</p>

@@ -18,17 +18,29 @@ class PostNewJob extends Component {
 
     handlePostJob = () => {
         if (window.confirm("Are you sure you want to post this job?")) {
-            // TODO: POST / INSERT posted job, make sure the not nulls are checked - if a value is not null but is empty, warn the user
             const job = {
                 'position': this.state['new-job-position'],
                 'postedDate': Date.now(),
                 'location': this.state['new-job-location'],
                 'description': this.state['new-job-description'],
-                'salary': this.state['new-job-salary'] || 0,
+                'salary': this.state['new-job-salary'],
                 'recruiterEmail': this.state['new-job-recruiterEmail'],
                 'category': this.state['new-job-category'],
                 'skill': this.state['new-job-skill'],
             }
+
+            // Fulfiling not null conditions
+            if (job.location === "" ) {
+                window.alert("Location must be filled.")
+                return
+            }
+
+            if (job.description === "") {
+                window.alert("Description must be filled.")
+                return
+            }
+
+            // TODO: POST / INSERT posted job
 
             window.alert('New job has been posted with ID ***' + JSON.stringify(job))
         }

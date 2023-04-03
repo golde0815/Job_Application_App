@@ -86,7 +86,7 @@ class CompanyProfile extends Component {
             <h2>View Company Information</h2>
             <div className="companyprofile-actions">
               <button className="companyprofile-action">
-                  <Link className= "companyprofile-action-link" to='/postedJobs'>Posted Jobs</Link>
+                  <Link className= "companyprofile-action-link" to='/companyPostedJobs'>Posted Jobs</Link>
                 </button>
               <button className="companyprofile-action">Ratings</button>
             </div>

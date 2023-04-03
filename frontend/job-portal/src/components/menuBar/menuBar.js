@@ -35,7 +35,7 @@ class MenuBar extends Component {
             }
             {isUserView && 
               <li className="nav-item">
-                <Link to="/">Jobs</Link>
+                <Link to="/userPostedJobs">Jobs</Link>
               </li>
             }
             {!isUserView &&

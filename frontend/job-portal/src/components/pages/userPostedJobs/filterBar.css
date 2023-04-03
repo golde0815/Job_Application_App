@@ -1,0 +1,44 @@
+.filter-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #ebebeb;
+  }
+  
+  .filter-bar label {
+    margin-right: 10px;
+  }
+  
+  .filter-bar select, .filter-bar input[type="number"] {
+    width: 150px;
+    margin-right: 10px;
+  }
+  
+  .filter-bar button {
+    margin-left: 10px;
+  }
+
+  .filter-bar .Dropdown-control {
+    min-width: 200px;
+    min-height: 40px;
+  }
+  
+  #filter-apply-button {
+    margin: 20px;
+    padding: 10px 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    min-width: 90px;
+    color: black;
+    border-width: 0px;
+    margin-left: 10px;
+    background-color: #4dc3a98c;
+}
+
+#filter-apply-button:hover {
+    background-color: #3385739b;
+    cursor: pointer;
+}
