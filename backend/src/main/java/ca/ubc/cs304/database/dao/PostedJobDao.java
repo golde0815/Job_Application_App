@@ -61,7 +61,7 @@ public class PostedJobDao {
             query = query + " = ?";
         }
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ArrayList<PostedJob> result = new ArrayList<>();
+            List<PostedJob> result = new ArrayList<>();
             setPreparedStatementParameter(ps, 1, attribute, value);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
