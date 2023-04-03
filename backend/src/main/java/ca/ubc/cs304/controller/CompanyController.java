@@ -2,9 +2,17 @@ package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.dao.CompanyDao;
 import ca.ubc.cs304.database.model.Company;
-import ca.ubc.cs304.database.model.DeleteCompany;
+import ca.ubc.cs304.database.model.ResponseMessage;
 import ca.ubc.cs304.database.model.TopCompany;
-import org.springframework.web.bind.annotation.*;
+import ca.ubc.cs304.exception.GenericSQLException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
@@ -16,17 +24,22 @@ public class CompanyController {
         this.companyDao = companyDao;
     }
 
-    @DeleteMapping("/company")
-    private String deleteCompany(@RequestBody DeleteCompany deleteCompany) {
-        companyDao.deleteCompany(deleteCompany);
-        return "OK";
+    // 2. DELETE
+    @DeleteMapping("/companies/{companyId}")
+    @ResponseBody
+    private ResponseMessage deleteCompany(@PathVariable int companyId) {
+        try {
+            companyDao.deleteCompany(companyId);
+            return new ResponseMessage("OK");
+        } catch (GenericSQLException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
+        }
     }
 
     // 6. JOIN
     @GetMapping("/company")
     private Company[] selectCompanyPostedJob(@RequestParam LocalDate postedDate) {
         return companyDao.selectCompanyPostedJob(postedDate);
-        // return "OK";
     }
 
     // 9. Nested Aggregation with GROUP BY

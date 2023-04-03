@@ -1,8 +1,8 @@
 package ca.ubc.cs304.database.dao;
 
 import ca.ubc.cs304.database.model.Company;
-import ca.ubc.cs304.database.model.DeleteCompany;
 import ca.ubc.cs304.database.model.TopCompany;
+import ca.ubc.cs304.exception.GenericSQLException;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -15,20 +15,23 @@ import java.util.ArrayList;
 @Component
 public class CompanyDao {
     private final Connection connection;
+
     public CompanyDao(Connection connection) {
         this.connection = connection;
     }
 
-    public void deleteCompany(DeleteCompany deleteCompany) {
+    public void deleteCompany(int companyId) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM COMPANY WHERE COMPANY_ID = ?");
-            ps.setInt(1, deleteCompany.getCompany_id());
+            ps.setInt(1, companyId);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             System.err.println("Delete Company failed: " + e.getMessage());
+            throw new GenericSQLException(e);
         }
     }
+
     public Company[] selectCompanyPostedJob(LocalDate postedDate) {
         ArrayList<Company> result = new ArrayList<>();
         try {
@@ -36,7 +39,7 @@ public class CompanyDao {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setDate(1, java.sql.Date.valueOf(postedDate));
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Company model = new Company(rs.getString("name"),
                         rs.getDate("posted_date").toLocalDate());
                 result.add(model);
@@ -56,7 +59,7 @@ public class CompanyDao {
             String query = "SELECT R.COMPANY_ID, AVG(VALUE), AVG(SALARY) FROM RATES R JOIN POSTED_JOB P ON R.COMPANY_ID = P.COMPANY_ID GROUP BY R.COMPANY_ID HAVING AVG(VALUE) > (SELECT AVG(VALUE) FROM RATES R) AND AVG(SALARY) > (SELECT AVG(SALARY) FROM POSTED_JOB)";
             PreparedStatement ps = connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 TopCompany model = new TopCompany(rs.getInt("company_id"),
                         rs.getInt("avg(value)"),
                         rs.getInt("avg(salary)"));
