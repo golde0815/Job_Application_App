@@ -14,8 +14,6 @@ class CompanyPostedJobs extends Component {
     }
     
     componentDidMount = () => {
-        // 7. Aggregation with GROUP BY
-        // fetchedJobs already has numApplicants for each job
         fetch('http://localhost:8080/jobs').then(response => {
             if (!response.ok) {
                 return Promise.reject(response)
@@ -118,7 +116,7 @@ class CompanyPostedJobs extends Component {
                                 <p className="posted-job-name">{job.jobId}:{job.position}</p>
                                 <p className="posted-job-date">Posted: {job.postedDate}</p>
                                 <p className="posted-job-location">Location: {job.location}</p>
-                                <p className="posted-job-num-applied">{job.numApplicants} users have applied for this job</p>
+                                <p className="posted-job-salary">Salary: {job.salary}</p>
                             </button>
                         ))
                     }

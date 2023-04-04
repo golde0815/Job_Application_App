@@ -13,23 +13,20 @@ class CompanyPostedJob extends Component {
             'description': null,
             'salary': null,
             'recruiterEmail': null,
+            'numApplicants': null,
             isEdit: false,
         }
     }
 
     componentDidMount() {
-        const queryString = new URLSearchParams({
-            attribute: 'job_id',
-            value: this.props.jobId
-        }).toString()
-        fetch(`http://localhost:8080/jobs?${queryString}`).then(response => {
+        // 7. Aggregation with GROUP BY
+        fetch(`http://localhost:8080/jobs/${this.props.jobId}`).then(response => {
             if (!response.ok) {
                 return Promise.reject(response)
             } else {
                 return response.json()
             }
-        }).then(jobs => {
-            const job = jobs[0]
+        }).then(job => {
             this.setState({
                 'jobId': job.jobId,
                 'position': job.position,
@@ -38,6 +35,7 @@ class CompanyPostedJob extends Component {
                 'description': job.description,
                 'salary': job.salary,
                 'recruiterEmail': job.recruiterEmail,
+                'numApplicants': job.numApplicants
             })
         }).catch(errorResponse =>  {
             errorResponse.json().then(error => {
@@ -123,7 +121,7 @@ class CompanyPostedJob extends Component {
 
   render() {
     const {jobId, position, postedDate, location, description, salary, 
-        recruiterEmail, isEdit} = this.state
+        recruiterEmail, numApplicants, isEdit} = this.state
 
     return (
         <div>
@@ -134,6 +132,8 @@ class CompanyPostedJob extends Component {
                 GO BACK
             </button>
             <p>Posted: {postedDate}</p>
+            // TODO: @arya implement button to toggle show numApplicants and call API again
+            <p>Number of Applicants: {numApplicants}</p>
             <div className="posted-job-info">
                 <p>Position: 
                     <input
