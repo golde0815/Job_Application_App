@@ -53,7 +53,7 @@ class CompanyProfile extends Component {
         method: 'DELETE'
       }).then(response => {
         console.log(response)
-        window.alert("Compnay has been successfully deleted.")
+        window.alert("Company has been successfully deleted.")
       }).catch(error => {
         console.error(error)
         window.alert("An error occured while trying to delete this company. " + error)
@@ -77,26 +77,6 @@ class CompanyProfile extends Component {
             <div className="companyprofile-info-container">
               <p>ID: {company.id}</p>
               <p>Name: {company.name}</p>
-              {
-                !isEdit && 
-                // TODO: maybe remove this?
-                <p>Industry: {company.industry}</p>
-              }
-
-              {
-                isEdit && 
-                  <div>
-                    <p>Industry:</p>
-                    <select id="companyprofile-industry-dropdown">
-                      <option value="0">{company.industry}</option>
-                      {industries.map((industry, index) => (
-                        <option key={index} value={industry}>
-                          {industry}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-              }
               <button onClick={this.handleToggleEdit} className={isEdit ? "companyprofile-edit-toggle on" : "companyprofile-edit-toggle off"}>
                 {isEdit ? "SAVE" : "EDIT"}
               </button>

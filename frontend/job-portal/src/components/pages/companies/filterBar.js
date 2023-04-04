@@ -30,7 +30,7 @@ class FilterBar extends Component {
     }
 
     if (rating < 0 || rating > 10) {
-        window.alert("Rating can only have be a value between 0 and 5")
+        window.alert("Rating can only have be a value between 0 and 10")
         return
     }
 
