@@ -13,8 +13,6 @@ class CompanyPostedJob extends Component {
             'description': null,
             'salary': null,
             'recruiterEmail': null,
-            'category': null,
-            'skill': null,
             isEdit: false,
         }
     }
@@ -34,8 +32,6 @@ class CompanyPostedJob extends Component {
                 'description': job.description,
                 'salary': job.salary,
                 'recruiterEmail': job.recruiterEmail,
-                'category': job.category,
-                'skill': job.skill,
             })
         }).catch(error => console.error(error))
     }
@@ -108,7 +104,7 @@ class CompanyPostedJob extends Component {
 
   render() {
     const {jobId, position, postedDate, location, description, salary, 
-        recruiterEmail, category, skill, isEdit} = this.state
+        recruiterEmail, isEdit} = this.state
 
     return (
         <div>
@@ -153,24 +149,6 @@ class CompanyPostedJob extends Component {
                         id="posted-job-email"
                         readOnly={!isEdit}
                         defaultValue={recruiterEmail}
-                        onChange={this.handleInputChange}
-                    />
-                </p>
-                <p>Category: 
-                    <input
-                        type="text"
-                        id="posted-job-category"
-                        readOnly={!isEdit}
-                        defaultValue={category}
-                        onChange={this.handleInputChange}
-                    />
-                </p>
-                <p>Skills: 
-                    <input
-                        type="text"
-                        id="posted-job-skill"
-                        readOnly={!isEdit}
-                        defaultValue={skill}
                         onChange={this.handleInputChange}
                     />
                 </p>

@@ -12,8 +12,6 @@ class PostNewJob extends Component {
             'new-job-description': "",
             'new-job-salary': 0,
             'new-job-recruiterEmail': "",
-            'new-job-category': "",
-            'new-job-skill': "",
         }
     }
 
@@ -25,20 +23,7 @@ class PostNewJob extends Component {
                 'location': this.state['new-job-location'],
                 'description': this.state['new-job-description'],
                 'salary': this.state['new-job-salary'],
-                'recruiterEmail': this.state['new-job-recruiterEmail'],
-                'category': this.state['new-job-category'],
-                'skill': this.state['new-job-skill'],
-            }
-
-            // Fulfiling not null conditions
-            if (job.location === "" ) {
-                window.alert("Location must be filled.")
-                return
-            }
-
-            if (job.description === "") {
-                window.alert("Description must be filled.")
-                return
+                'recruiterEmail': this.state['new-job-email'],
             }
 
             // 1. INSERT
@@ -56,8 +41,6 @@ class PostNewJob extends Component {
                 console.error(error)
                 window.alert("An error occured while trying to insert this job. " + error)
             })
-
-            window.alert('New job has been posted with ID ' + JSON.stringify(job))
         }
     }
 
@@ -100,20 +83,6 @@ class PostNewJob extends Component {
                     <input
                         type="text"
                         id="new-job-email"
-                        onChange={this.handleInputChange}
-                    />
-                </p>
-                <p>Category: 
-                    <input
-                        type="text"
-                        id="new-job-category"
-                        onChange={this.handleInputChange}
-                    />
-                </p>
-                <p>Skills: 
-                    <input
-                        type="text"
-                        id="new-job-skill"
                         onChange={this.handleInputChange}
                     />
                 </p>
