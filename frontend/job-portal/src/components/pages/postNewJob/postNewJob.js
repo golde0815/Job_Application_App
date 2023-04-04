@@ -19,8 +19,9 @@ class PostNewJob extends Component {
     handlePostJob = () => {
         if (window.confirm("Are you sure you want to post this job?")) {
             const job = {
+                // TODO: need to provide companyId
+                'companyId': 5,
                 'position': this.state['new-job-position'],
-                'postedDate': Date.now(),
                 'location': this.state['new-job-location'],
                 'description': this.state['new-job-description'],
                 'salary': this.state['new-job-salary'],
@@ -40,7 +41,14 @@ class PostNewJob extends Component {
                 return
             }
 
-            // TODO: POST / INSERT posted job
+            // 1. INSERT
+            fetch('http://localhost:8080/jobs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(job)
+            }).then(response => console.log(response)).catch(error => console.error(error))
 
             window.alert('New job has been posted with ID ***' + JSON.stringify(job))
         }
