@@ -17,85 +17,62 @@ class CompanyPostedJobs extends Component {
     }
     
     componentDidMount = () => {
-        // TODO: GET ALL posted jobs for initialization 
-
-        const fetchedJobs = [
-            {
-                'jobID': 1,
-                'position': 'Software Engineer',
-                'postedDate': '23rd March, 2023',
-                'location': 'Vancouver, BC', 
-            },
-            {
-                'jobID': 2, 
-                'position': 'Software Engineer Coop',
-                'postedDate': '23rd March, 2023',
-                'location': 'Vancouver, BC',
-            },
-            {
-                'jobID': 3, 
-                'position': 'UI/UX Designer',
-                'postedDate': '23rd March, 2023',
-                'location': 'Vancouver, BC',
-            }
-        ]
-
-        this.setState({
-            allJobs: fetchedJobs, 
-            jobs: fetchedJobs
-        })
+        // 7. Aggregation with GROUP BY
+        // fetchedJobs already has numApplicants for each job
+        fetch('http://localhost:8080/jobs').then(response => response.json()).then(fetchedJobs => {
+            this.setState({
+                allJobs: fetchedJobs,
+                jobs: fetchedJobs
+            })
+        }).catch(error => console.error(error))
     }
 
-    handleClickJob = (jobID) => {
+    handleClickJob = (jobId) => {
         this.setState(prevState => ({
             isSeeingJob: !prevState.isSeeingJob,
-            selectedJob: jobID
+            selectedJob: jobId
         }))
     }
 
     handleApplyFilters = (postedAfter, location, salary) => {
-        // TODO: Apply filters, run SELECT query, Update the value of this.state.jobs based on the response
-
         var filteredJobs = []
 
+        // 4. SELECT
+        let params = null;
         if (postedAfter === '' && location === null && salary == null) {
             filteredJobs = this.state.allJobs
         } else if (postedAfter === '' && location === null) {
             window.alert("Applying filters with salary = " + salary)
-            filteredJobs = [
-                {
-                    'jobID': 1,
-                    'position': 'Software Engineer',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC', 
-                },
-            ]
+            params = {
+                attribute: 'salary',
+                value: salary
+            }
         } else if (postedAfter === '' & salary === null) {
             window.alert("Applying filters with location = " + location)
-            filteredJobs = [
-                {
-                    'jobID': 1,
-                    'position': 'Software Engineer',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC', 
-                },
-            ]
+            params = {
+                attribute: 'location',
+                value: location
+            }
         } else if (location === null && salary === null) {
             window.alert("Applying filters with postedAfter = " + postedAfter)
-            filteredJobs = [
-                {
-                    'jobID': 1,
-                    'position': 'Software Engineer',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC', 
-                },
-            ]
-        } 
+            params = {
+                attribute: 'posted_date',
+                value: postedAfter
+            }
+        }
 
-        this.setState({
-            jobs: filteredJobs
-        })
-
+        const queryString = new URLSearchParams(params).toString()
+        if (params === null) {
+            this.setState({
+                jobs: filteredJobs
+            })
+        } else {
+            fetch(`http://localhost:8080/jobs?${queryString}`).then(response => response.json()).then(filteredJobs => {
+                this.setState({
+                    jobs: filteredJobs
+                })
+            }).catch(error => console.error(error))
+        }
     }
 
     handleGoBack = () => {
@@ -130,9 +107,9 @@ class CompanyPostedJobs extends Component {
                     {
                         this.state.jobs.map((job, index) => (
                             
-                            <button className="posted-job" onClick={() => this.handleClickJob(job.jobID)}>
+                            <button className="posted-job" onClick={() => this.handleClickJob(job.jobId)}>
                                 <p className="posted-job-index">{index+1}</p>
-                                <p className="posted-job-name">{job.jobID}:{job.position}</p>
+                                <p className="posted-job-name">{job.jobId}:{job.position}</p>
                                 <p className="posted-job-date">{job.postedDate}</p>
                                 <p className="posted-job-location">{job.location}</p>
                             </button>
@@ -145,7 +122,7 @@ class CompanyPostedJobs extends Component {
         {
             this.state.isSeeingJob && 
                 <UserPostedJob
-                    jobID={this.state.selectedJob}
+                    jobId={this.state.selectedJob}
                     handleGoBack={this.handleGoBack}
                 ></UserPostedJob>
 

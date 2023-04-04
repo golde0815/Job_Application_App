@@ -6,21 +6,38 @@ class CompanyPostedJob extends Component {
         super(props)
 
         this.state = {
-            'jobID': 1,
-            'position': 'Software Engineer',
-            'postedDate': '23rd March, 2023',
-            'location': 'Vancouver, BC',
-            'description': 'You will need to be build a job portal',
-            'salary': 10000,
-            'recruiterEmail': 'recruiter@gmail.com',
-            'category': 'Software',
-            'skill': 'Python',
+            'jobId': this.props.jobId,
+            'position': null,
+            'postedDate': null,
+            'location': null,
+            'description': null,
+            'salary': null,
+            'recruiterEmail': null,
+            'category': null,
+            'skill': null,
             isEdit: false,
         }
     }
 
     componentDidMount() {
-        // TODO: based on this.props.jobID, GET the job info
+        const queryString = new URLSearchParams({
+            attribute: 'job_id',
+            value: this.props.jobId
+        }).toString()
+        fetch(`http://localhost:8080/jobs?${queryString}`).then(response => response.json()).then(jobs => {
+            const job = jobs[0]
+            this.setState({
+                'jobId': job.jobId,
+                'position': job.position,
+                'postedDate': job.postedDate,
+                'location': job.location,
+                'description': job.description,
+                'salary': job.salary,
+                'recruiterEmail': job.recruiterEmail,
+                'category': job.category,
+                'skill': job.skill,
+            })
+        }).catch(error => console.error(error))
     }
 
     handleToggleEdit = () => {
@@ -28,8 +45,50 @@ class CompanyPostedJob extends Component {
             isEdit: !prevState.isEdit
         }), () => {
             if(!this.state.isEdit) {
-                // TODO: UPDATE posted job
-                window.alert(this.state['posted-job-description'] || this.state.description)
+                // 3. UPDATE
+                const toUpdate = []
+                if (this.state['posted-job-position']) {
+                    toUpdate.push({
+                        'attribute': 'position',
+                        'value': this.state['posted-job-position']
+                    })
+                }
+                if (this.state['posted-job-salary']) {
+                    toUpdate.push({
+                        'attribute': 'salary',
+                        'value': this.state['posted-job-salary']
+                    })
+                }
+                if (this.state['posted-job-location']) {
+                    toUpdate.push({
+                        'attribute': 'location',
+                        'value': this.state['posted-job-location']
+                    })
+                }
+                if (this.state['posted-job-email']) {
+                    toUpdate.push({
+                        'attribute': 'recruiter_email',
+                        'value': this.state['posted-job-email']
+                    })
+                }
+                if (this.state['posted-job-description']) {
+                    toUpdate.push({
+                        'attribute': 'description',
+                        'value': this.state['posted-job-description']
+                    })
+                }
+                const requestBody = {
+                    toUpdate: toUpdate,
+                    jobId: this.props.jobId
+                }
+
+                fetch('http://localhost:8080/jobs', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                }).then(response => console.log(response)).catch(error => console.error(error))
 
                 window.alert('Job Posting has been updated')
                 
@@ -45,13 +104,13 @@ class CompanyPostedJob extends Component {
     
 
   render() {
-    const {jobID, position, postedDate, location, description, salary, 
+    const {jobId, position, postedDate, location, description, salary, 
         recruiterEmail, category, skill, isEdit} = this.state
 
     return (
         <div>
             <div className="page-header">
-                <h2>{jobID}:{position}</h2>
+                <h2>{jobId}:{position}</h2>
             </div>
             <button className="go-back" onClick={this.props.handleGoBack}>
                 GO BACK

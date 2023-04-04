@@ -7,39 +7,40 @@ class CompanyPostedJobs extends Component {
         super(props)
 
         this.state = {
-        // TODO: GET posted jobs of the default company, fill this list with it instead
-            jobs: [
-                {
-                    'jobID': 1,
-                    'position': 'Software Engineer',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC'
-                },
-                {
-                    'jobID': 2, 
-                    'position': 'Software Engineer Coop',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC'
-                },
-                {
-                    'jobID': 3, 
-                    'position': 'UI/UX Designer',
-                    'postedDate': '23rd March, 2023',
-                    'location': 'Vancouver, BC'
-                }
-            ],
-            // TODO: GET the user that has applied to all jobs in the default company
-            starUser: 'Arya',
+            jobs: [],
+            starUsers: '',
             isSeeingJob: false,
             selectedJob: null
         }
 
     }
 
-    handleClickJob = (jobID) => {
+    componentDidMount = () => {
+        // TODO: choose what the default company_id should be
+        const defaultCompanyId = 5;
+
+        const queryString = new URLSearchParams({
+            attribute: 'company_id',
+            value: defaultCompanyId
+        }).toString()
+        fetch(`http://localhost:8080/jobs?${queryString}`).then(response => response.json()).then(jobs => {
+            this.setState({
+                jobs: jobs
+            })
+        }).catch(error => console.error(error))
+
+        // 10. Division
+        fetch(`http://localhost:8080/users/applications/${defaultCompanyId}`).then(response => response.json()).then(users => {
+            this.setState({
+                starUsers: users.map(user => user.email).join(', ')
+            })
+        }).catch(error => console.error(error))
+    }
+
+    handleClickJob = (jobId) => {
         this.setState(prevState => ({
             isSeeingJob: !prevState.isSeeingJob,
-            selectedJob: jobID
+            selectedJob: jobId
         }))
     }
 
@@ -63,15 +64,15 @@ class CompanyPostedJobs extends Component {
                     <h2>Company Posted Jobs</h2>
                 </div>
                 <div className="posted-job-staruser">
-                    <p>Users that have applied to all jobs: {this.state.starUser}</p>
+                    <p>Users that have applied to all jobs: {this.state.starUsers}</p>
                 </div>
                 <div>
                     {
                         this.state.jobs.map((job, index) => (
                             
-                            <button className="posted-job" onClick={() => this.handleClickJob(job.jobID)}>
+                            <button className="posted-job" onClick={() => this.handleClickJob(job.jobId)}>
                                 <p className="posted-job-index">{index+1}</p>
-                                <p className="posted-job-name">{job.jobID}:{job.position}</p>
+                                <p className="posted-job-name">{job.jobId}:{job.position}</p>
                                 <p className="posted-job-date">{job.postedDate}</p>
                                 <p className="">{job.location}</p>
                             </button>
@@ -84,7 +85,7 @@ class CompanyPostedJobs extends Component {
         {
             this.state.isSeeingJob && 
                 <CompanyPostedJob
-                    jobID={this.state.selectedJob}
+                    jobId={this.state.selectedJob}
                     handleGoBack={this.handleGoBack}
                 ></CompanyPostedJob>
 

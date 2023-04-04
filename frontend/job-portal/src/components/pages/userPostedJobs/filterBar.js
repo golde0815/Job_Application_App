@@ -15,18 +15,11 @@ class FilterBar extends Component {
   }
 
   componentDidMount() {
-    // TODO: GET all locations and make set these as the values in locationOptions, 
-    // remove the code below after done
-
-    this.setState({
-
-        locationOptions: [
-            { value: 'location1', label: 'Location 1' },
-            { value: 'location2', label: 'Location 2' },
-            { value: 'location3', label: 'Location 3' }
-          ]
-    })
-  
+    fetch('http://localhost:8080/locations').then(response => response.json()).then(locationOptions => {
+        this.setState({
+          locationOptions: locationOptions
+        })
+    }).catch(error => console.error(error))
   }
 
   handlePostedAfterChange = event => {

@@ -14,52 +14,19 @@ class Companies extends Component {
     }
 
     componentDidMount() {
-        // TODO: GET all companies for initialization and their ratings
-        // replace the list below with the fetched values 
-        
-        const fetchedList = [
-            {
-                'companyID': 1,
-                'name': 'Netflix Inc',
-                'rating': '3'
-            },
-            {
-                'companyID': 3,
-                'name': 'Amazon.com',
-                'rating': '5'
-            },
-            {
-                'companyID': 5,
-                'name': 'Microsoft',
-                'rating': '4'
-            },
-            {
-                'companyID': 9,
-                'name': 'Snap Inc.',
-                'rating': '2'
-            },
-        ]
+        fetch('http://localhost:8080/companies').then(response => response.json()).then(fetchedList => {
+            this.setState({
+                companies: fetchedList,
+                allCompanies: fetchedList
+            })
+        }).catch(error => console.error(error))
 
-        // TODO:  (GROUP BY requirement) Get all companies that have rating and salaries higher than avg of all
-        const topList = [
-            {
-                'companyID': 1,
-                'name': 'Netflix Inc',
-                'rating': '3'
-            },
-            {
-                'companyID': 3,
-                'name': 'Amazon.com',
-                'rating': '5'
-            },
-        ]
-
-        this.setState({
-            companies: fetchedList,
-            allCompanies: fetchedList,
-            topCompanies: topList
-        })
-
+        // 9. Nested Aggregation with GROUP BY
+        fetch('http://localhost:8080/topcompanies').then(response => response.json()).then(topList => {
+            this.setState({
+                topCompanies: topList
+            })
+        }).catch(error => console.error(error))
     }
 
     handleGoBack = () => {
@@ -70,32 +37,37 @@ class Companies extends Component {
     }
 
     handleApplyFilters = (postedAfter, minRating) => {
-        // TODO: (minRating = Aggregation with HAVING requirement) - get all companies with rating higher  than minimum rating given by user 
-        // TODO: (postedAfter = JOIN requirement ) - get all companies that have a postedJob posted after given date
-
         var filteredCompanies = []
 
+        let params = null;
         if (postedAfter === '' && minRating === null) {
             filteredCompanies = this.state.allCompanies
         } else if (postedAfter === '') {
+            // 8. Aggregation with HAVING
             window.alert("Applying filters with minRating = " + minRating)
-            filteredCompanies = [{
-                'companyID': 5,
-                'name': 'Microsoft',
-                'rating': '4'
-            }]
+            params = {
+                'minimumRating': minRating
+            }
         } else if (minRating === null) {
+            // 6. JOIN
             window.alert("Applying filters with postedAfter = " + postedAfter)
-            filteredCompanies = [{
-                'companyID': 5,
-                'name': 'Microsoft',
-                'rating': '4'
-            }]
+            params = {
+                'postedAfter': postedAfter
+            }
         }
 
-        this.setState({
-            companies: filteredCompanies
-        })
+        const queryString = new URLSearchParams(params).toString()
+        if (params === null) {
+            this.setState({
+                companies: filteredCompanies
+            })
+        } else {
+            fetch(`http://localhost:8080/companies?${queryString}`).then(response => response.json()).then(filteredCompanies => {
+                this.setState({
+                    companies: filteredCompanies
+                })
+            }).catch(error => console.error(error))
+        }
     }
 
     handleClearFilters = () => {
@@ -123,8 +95,8 @@ class Companies extends Component {
                             
                             <button className="posted-job">
                                 <p className="posted-job-index">{index+1}</p>
-                                <p className="posted-job-name">{company.companyID}:{company.name}</p>
-                                <p className="posted-job-date">Rating: {company.rating}/5</p>
+                                <p className="posted-job-name">{company.companyId}:{company.name}</p>
+                                <p className="posted-job-date">Rating: {company.rating}/10</p>
                             </button>
                         ))
                     }
