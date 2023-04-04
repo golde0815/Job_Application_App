@@ -86,7 +86,7 @@ public class PostedJobDao {
 
     public List<PostedJob> selectPostedJob(String attribute, String value) {
         String query = "SELECT * FROM POSTED_JOB WHERE " + attribute;
-        if (attribute.equals("salary")) {
+        if (attribute.equals("salary") || attribute.equals("posted_date")) {
             query = query + " >= ?";
         } else {
             query = query + " = ?";
