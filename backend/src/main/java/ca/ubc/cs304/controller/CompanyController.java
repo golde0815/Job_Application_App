@@ -1,6 +1,7 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.dao.CompanyDao;
+import ca.ubc.cs304.database.model.Company;
 import ca.ubc.cs304.database.model.CompanyWithRating;
 import ca.ubc.cs304.database.model.ResponseMessage;
 import ca.ubc.cs304.database.model.TopCompany;
@@ -43,6 +44,15 @@ public class CompanyController {
         try {
             companyDao.deleteCompany(companyId);
             return new ResponseMessage("OK");
+        } catch (GenericSQLException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
+        }
+    }
+
+    @GetMapping("/companies/{companyId}")
+    private Company getCompany(@PathVariable int companyId) {
+        try {
+            return companyDao.getCompany(companyId);
         } catch (GenericSQLException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
         }

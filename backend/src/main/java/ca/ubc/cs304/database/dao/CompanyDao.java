@@ -1,5 +1,6 @@
 package ca.ubc.cs304.database.dao;
 
+import ca.ubc.cs304.database.model.Company;
 import ca.ubc.cs304.database.model.CompanyWithRating;
 import ca.ubc.cs304.database.model.TopCompany;
 import ca.ubc.cs304.exception.GenericSQLException;
@@ -45,6 +46,21 @@ public class CompanyDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Delete Company failed: " + e.getMessage());
+            throw new GenericSQLException(e);
+        }
+    }
+
+    public Company getCompany(int companyId) {
+        String query = "SELECT * FROM COMPANY WHERE COMPANY_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, companyId);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            Company result = new Company(rs.getInt("company_id"), rs.getString("name"));
+            rs.close();
+            return result;
+        } catch (SQLException e) {
+            System.err.println("Get company failed: " + e.getMessage());
             throw new GenericSQLException(e);
         }
     }

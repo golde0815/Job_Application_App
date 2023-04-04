@@ -137,6 +137,10 @@ public class PostedJobDao {
     }
 
     public void updatePostedJob(UpdatePostedJob updatePostedJob) {
+        if (updatePostedJob.toUpdate().size() == 0) {
+            return;
+        }
+
         StringBuilder sql = new StringBuilder("UPDATE POSTED_JOB SET ");
         for (UpdatePostedJob.toUpdateFields field : updatePostedJob.toUpdate()) {
             if (field.attribute().equals("job_id")) {
