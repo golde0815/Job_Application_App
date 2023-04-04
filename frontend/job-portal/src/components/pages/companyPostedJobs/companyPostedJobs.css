@@ -1,0 +1,30 @@
+.posted-job {
+    display: flex;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    margin: 5px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color: #338573;
+    background-color: #58dec18c;
+    min-width: 99%;
+
+}
+
+.posted-job:hover {
+    background-color: #4dc3a98c;
+    cursor: pointer;
+
+}
+
+.posted-job-staruser {
+    color: #338573;
+    font-size: 18px;
+    padding: 20px;
+    font-weight: bold;
+}
+
+.posted-job-index, .posted-job-name, .posted-job-date, .posted-job-position, .posted-job-location {
+    padding-right: 60px;
+}
