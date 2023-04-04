@@ -50,7 +50,7 @@ VALUES ('bobjohnson@gmail.com', 4, 7, 'I enjoyed working here');
 INSERT INTO RATES (EMAIL, COMPANY_ID, VALUE, R_COMMENT)
 VALUES ('tombrown@gmail.com', 4, 8, 'Good company');
 INSERT INTO RATES (EMAIL, COMPANY_ID, VALUE)
-VALUES ('tombrown@gmail.com', 5, 5);
+VALUES ('tombrown@gmail.com', 5, 7);
 
 INSERT INTO INDUSTRY (NAME)
 VALUES ('Technology');
@@ -96,23 +96,23 @@ VALUES ('mikedavis@gmail.com', 'Mike Davis');
 INSERT INTO RECRUITER (EMAIL, NAME)
 VALUES ('andrewwilliams@gmail.com', 'Andrew Williams');
 
-INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
-VALUES (1, 2, '2019-01-01', 'Vancouver',
-        'We are seeking a highly motivated and experienced accountant to join our finance team.', 70000,
+INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
+VALUES (1, 2, '2019-01-01', 'Accountant', 'Vancouver',
+        'We are seeking a highly motivated and experienced accountant to join our finance team.', 130000,
         'jasonmiller@gmail.com');
-INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
-VALUES (2, 3, '2019-01-02', 'Burnaby',
+INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
+VALUES (2, 3, '2019-01-02', 'Investment Banker', 'Burnaby',
         'The investment banker will be responsible for providing strategic financial advice to clients.', 200000,
         'lisawilson@gmail.com');
-INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
-VALUES (3, 3, '2019-01-03', 'Burnaby', 'The ideal candidate will have strong programming skills.', 93000,
-        'lisawilson@gmail.com');
-INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
-VALUES (4, 4, '2019-01-04', 'Richmond',
+INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
+VALUES (3, 3, '2019-01-03', 'Software Engineer', 'Burnaby', 'The ideal candidate will have strong programming skills.',
+        93000, 'lisawilson@gmail.com');
+INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
+VALUES (4, 4, '2019-01-04', 'Software Engineer', 'Richmond',
         'The software engineer will be responsible for designing and developing software.', 65000,
         'mikedavis@gmail.com');
-INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
-VALUES (5, 5, '2019-01-05', 'Vancouver',
+INSERT INTO POSTED_JOB (JOB_ID, COMPANY_ID, POSTED_DATE, POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL)
+VALUES (5, 5, '2019-01-05', 'Software Engineer', 'Vancouver',
         'We are looking for a talented and passionate software engineer to join our development team.', 150000,
         'andrewwilliams@gmail.com');
 
@@ -170,6 +170,8 @@ INSERT INTO USER_APPLIES_TO (EMAIL, JOB_ID, APPLIED_DATE)
 VALUES ('bobjohnson@gmail.com', 4, '2019-01-07');
 INSERT INTO USER_APPLIES_TO (EMAIL, JOB_ID, APPLIED_DATE)
 VALUES ('bobjohnson@gmail.com', 5, '2019-01-07');
+INSERT INTO USER_APPLIES_TO (EMAIL, JOB_ID, APPLIED_DATE)
+VALUES ('janedoe@gmail.com', 5, '2019-01-08');
 
 INSERT INTO RESUME (EMAIL, DOCUMENT_ID, URL)
 VALUES ('janedoe@gmail.com', 1, 'https://www.example.com/1');
