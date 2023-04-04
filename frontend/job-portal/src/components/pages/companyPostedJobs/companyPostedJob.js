@@ -88,10 +88,13 @@ class CompanyPostedJob extends Component {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(requestBody)
-                }).then(response => console.log(response)).catch(error => console.error(error))
-
-                window.alert('Job Posting has been updated')
-                
+                }).then(response => {
+                    console.log(response)
+                    window.alert('Job Posting has been successfully updated')
+                }).catch(error => {
+                    console.error(error)
+                    window.alert('An error occured while updating the job posting. ' + error)
+                })                
             }
         })
     }

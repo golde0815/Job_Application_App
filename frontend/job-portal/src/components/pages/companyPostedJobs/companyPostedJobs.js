@@ -1,6 +1,8 @@
 import React, { Component }  from "react";
 import "./companyPostedJobs.css";
 import CompanyPostedJob from "./companyPostedJob";
+import "../../../constants"
+import { DEFAULT_COMPANY_ID } from "../../../constants";
 
 class CompanyPostedJobs extends Component {
     constructor(props) {
@@ -17,7 +19,7 @@ class CompanyPostedJobs extends Component {
 
     componentDidMount = () => {
         // TODO: choose what the default company_id should be
-        const defaultCompanyId = 5;
+        const defaultCompanyId = DEFAULT_COMPANY_ID;
 
         const queryString = new URLSearchParams({
             attribute: 'company_id',

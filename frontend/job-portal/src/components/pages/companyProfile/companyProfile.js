@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import "./companyProfile.css"
 import { Link } from "react-router-dom";
+import "../../../constants"
+import { DEFAULT_COMPANY_ID } from '../../../constants';
 
 class CompanyProfile extends Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class CompanyProfile extends Component {
   }
 
   componentDidMount = () => {
-      const defaultCompanyId = 5;
+      const defaultCompanyId = DEFAULT_COMPANY_ID;
       fetch(`http://localhost:8080/companies/${defaultCompanyId}`).then(response => response.json()).then(company => {
           this.setState({
             company: {
@@ -46,12 +48,16 @@ class CompanyProfile extends Component {
     if (window.confirm("Are you sure you want to delete this company?")) {
       // TODO: Choose default company_id
       // 2. DELETE
-      const defaultCompanyId = 5;
+      const defaultCompanyId = DEFAULT_COMPANY_ID;
       fetch(`http://localhost:8080/companies/${defaultCompanyId}`, {
         method: 'DELETE'
-      }).then(response => console.log(response)).catch(error => console.error(error))
-
-      window.alert("Company has been deleted")
+      }).then(response => {
+        console.log(response)
+        window.alert("Compnay has been successfully deleted.")
+      }).catch(error => {
+        console.error(error)
+        window.alert("An error occured while trying to delete this company. " + error)
+      })
     }
   }
 

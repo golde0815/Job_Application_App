@@ -1,5 +1,6 @@
 import React, { Component }  from "react";
 import "./postNewJob.css";
+import { DEFAULT_COMPANY_ID } from "../../../constants";
 
 class PostNewJob extends Component {
     constructor(props) {
@@ -19,8 +20,7 @@ class PostNewJob extends Component {
     handlePostJob = () => {
         if (window.confirm("Are you sure you want to post this job?")) {
             const job = {
-                // TODO: need to provide companyId
-                'companyId': 5,
+                'companyId': DEFAULT_COMPANY_ID,
                 'position': this.state['new-job-position'],
                 'location': this.state['new-job-location'],
                 'description': this.state['new-job-description'],
@@ -48,9 +48,16 @@ class PostNewJob extends Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(job)
-            }).then(response => console.log(response)).catch(error => console.error(error))
+            }).then(response => {
+                console.log(response.json())
+                window.alert("New job has been successfully posted.")
+            })
+            .catch(error => {
+                console.error(error)
+                window.alert("An error occured while trying to insert this job. " + error)
+            })
 
-            window.alert('New job has been posted with ID ***' + JSON.stringify(job))
+            window.alert('New job has been posted with ID ' + JSON.stringify(job))
         }
     }
 
