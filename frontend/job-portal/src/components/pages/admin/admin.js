@@ -14,7 +14,7 @@ class Admin extends Component {
       table: null,
       allAttributes: [],
       attributes: [],
-      queryResponse: ""
+      queryResponse: []
     }
   }
 
@@ -32,6 +32,8 @@ class Admin extends Component {
 
   handleChooseTable = (selected) => {
     fetch(`http://localhost:8080/tables/${selected.value}`).then(response => response.json()).then(attributes => {
+      this.handleChooseAttr([])  
+
       const allAttributes = []
       for (let i = 1; i <= attributes.length; i++) {
         allAttributes.push({name: attributes[i-1], id: i})
@@ -50,10 +52,15 @@ class Admin extends Component {
   }
 
   handleRun = () => {
-    if (this.state.table === null || this.state.attributes === []) {
-        window.alert("Please select at least 1 table and attribute to run the query.")
+    if (this.state.table === null) {
+        window.alert("Please select a table to run the query.")
         return
     }
+
+    if (this.state.attributes.length === 0) {
+      window.alert("Please select at least 1 attribute to run the query.")
+      return
+  }
 
     const queryParams = new URLSearchParams()
     this.state.attributes.forEach(attribute => queryParams.append('column', attribute.name));
@@ -66,6 +73,19 @@ class Admin extends Component {
   }
 
   render() {
+    const cols = [];
+    for (const key in this.state.queryResponse[0] || {}) {
+      cols.push(<th key={key}>{key}</th>);
+    }
+  
+    const rows = this.state.queryResponse.map((row, index) => {
+      const dataCells = [];
+      for (const key in row) {
+        dataCells.push(<td key={key}>{row[key]}</td>);
+      }
+      return <tr key={index}>{dataCells}</tr>;
+    });
+
     return (
       <div>
         <div className="page-header">
@@ -82,7 +102,12 @@ class Admin extends Component {
             displayValue="name" 
         />
         <button className="admin-run" onClick={this.handleRun}>RUN</button>
-        <p>Result: {this.state.queryResponse}</p>
+        <table>
+          <thead>
+            <tr>{cols}</tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
       </div>
     );
 
