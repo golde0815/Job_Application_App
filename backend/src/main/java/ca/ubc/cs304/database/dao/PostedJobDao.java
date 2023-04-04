@@ -57,14 +57,7 @@ public class PostedJobDao {
             List<PostedJob> result = new ArrayList<>();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                PostedJob model = new PostedJob(rs.getInt("job_id"),
-                        rs.getInt("company_id"),
-                        rs.getDate("posted_date").toLocalDate(),
-                        rs.getString("position"),
-                        rs.getString("location"),
-                        rs.getString("description"),
-                        rs.getInt("salary"),
-                        rs.getString("recruiter_email"));
+                PostedJob model = buildPostedJob(rs, false);
                 result.add(model);
             }
             rs.close();
@@ -87,14 +80,7 @@ public class PostedJobDao {
             setPreparedStatementParameter(ps, 1, attribute, value);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                PostedJob model = new PostedJob(rs.getInt("job_id"),
-                        rs.getInt("company_id"),
-                        rs.getDate("posted_date").toLocalDate(),
-                        rs.getString("position"),
-                        rs.getString("location"),
-                        rs.getString("description"),
-                        rs.getInt("salary"),
-                        rs.getString("recruiter_email"));
+                PostedJob model = buildPostedJob(rs, false);
                 result.add(model);
             }
             rs.close();
@@ -116,15 +102,7 @@ public class PostedJobDao {
             ps.setInt(1, jobId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                PostedJob model = new PostedJob(rs.getInt("job_id"),
-                        rs.getInt("company_id"),
-                        rs.getDate("posted_date").toLocalDate(),
-                        rs.getString("position"),
-                        rs.getString("location"),
-                        rs.getString("description"),
-                        rs.getInt("salary"),
-                        rs.getString("recruiter_email"),
-                        Optional.of(rs.getInt("num_applicants")));
+                PostedJob model = buildPostedJob(rs, true);
                 rs.close();
                 return model;
             } else {
@@ -205,5 +183,30 @@ public class PostedJobDao {
             }
             default -> throw new IllegalArgumentException("Invalid attribute: " + attribute);
         }
+    }
+
+    private static PostedJob buildPostedJob(ResultSet rs, boolean hasNumApplicants) throws SQLException {
+        PostedJob model;
+        if (hasNumApplicants) {
+            model = new PostedJob(rs.getInt("job_id"),
+                    rs.getInt("company_id"),
+                    rs.getDate("posted_date").toLocalDate(),
+                    rs.getString("position"),
+                    rs.getString("location"),
+                    rs.getString("description"),
+                    rs.getInt("salary"),
+                    rs.getString("recruiter_email"),
+                    Optional.of(rs.getInt("num_applicants")));
+        } else {
+            model = new PostedJob(rs.getInt("job_id"),
+                    rs.getInt("company_id"),
+                    rs.getDate("posted_date").toLocalDate(),
+                    rs.getString("position"),
+                    rs.getString("location"),
+                    rs.getString("description"),
+                    rs.getInt("salary"),
+                    rs.getString("recruiter_email"));
+        }
+        return model;
     }
 }
