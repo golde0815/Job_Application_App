@@ -15,14 +15,21 @@ class CompanyProfile extends Component {
         "Education",
         "Retail"
       ],
-      company: {
-        // TODO: GET defaultCompany
-        'id': 12345, 
-        'name': 'Netflix Inc.',
-        'industry': 'Entertainment'
-      },
+      company: {},
       isEdit: false
     }
+  }
+
+  componentDidMount = () => {
+      const defaultCompanyId = 5;
+      fetch(`http://localhost:8080/companies/${defaultCompanyId}`).then(response => response.json()).then(company => {
+          this.setState({
+            company: {
+              id: company.companyId,
+              name: company.name
+            }
+          })
+      }).catch(error => console.error(error))
   }
 
   handleToggleEdit = () => {
@@ -37,7 +44,13 @@ class CompanyProfile extends Component {
 
   handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this company?")) {
-      // TODO: Delete from server and show confirmation message
+      // TODO: Choose default company_id
+      // 2. DELETE
+      const defaultCompanyId = 5;
+      fetch(`http://localhost:8080/companies/${defaultCompanyId}`, {
+        method: 'DELETE'
+      }).then(response => console.log(response)).catch(error => console.error(error))
+
       window.alert("Company has been deleted")
     }
   }
@@ -60,6 +73,7 @@ class CompanyProfile extends Component {
               <p>Name: {company.name}</p>
               {
                 !isEdit && 
+                // TODO: maybe remove this?
                 <p>Industry: {company.industry}</p>
               }
 
