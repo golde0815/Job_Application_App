@@ -62,12 +62,6 @@ public class PostedJobController {
         }
     }
 
-    // 5. PROJECTION
-    @GetMapping("/jobs/{column}")
-    private Map<String, Object>[] projectPostedJob(@PathVariable String column) {
-        return postedJobDao.projectPostedJob(column);
-    }
-
     // 3. UPDATE
     @PatchMapping("/jobs")
     @ResponseBody

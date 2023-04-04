@@ -114,28 +114,6 @@ public class PostedJobDao {
         }
     }
 
-    // TODO: update this
-    public Map<String, Object>[] projectPostedJob(String column) {
-        Set<Map<String, Object>> result = new HashSet<>();
-        try {
-            String query = "SELECT " + column + " FROM POSTED_JOB";
-            PreparedStatement ps = connection.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Map<String, Object> model = new HashMap<>();
-                Object value = rs.getObject(column);
-                model.put(column, value);
-                result.add(model);
-            }
-            rs.close();
-            ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("project posted job failed: " + e.getMessage());
-        }
-        return result.toArray(new Map[result.size()]);
-    }
-
     public void updatePostedJob(UpdatePostedJob updatePostedJob) {
         if (updatePostedJob.toUpdate().size() == 0) {
             return;
