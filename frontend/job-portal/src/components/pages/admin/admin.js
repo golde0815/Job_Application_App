@@ -3,6 +3,7 @@ import Multiselect from 'multiselect-react-dropdown';
 import "./admin.css"
 import Dropdown from 'react-dropdown';
 
+// 5. Projection
 class Admin extends Component {
  
   constructor(props) {
@@ -18,25 +19,28 @@ class Admin extends Component {
   }
 
   componentDidMount() {
-    // TODO: Get all table names 
-
-    const allTables = [{label:'Table1', value:1}, {label:'Table2', value:2}, {label:'Table3', value:3},
-                            {label:'Table4', value:4}, {label:'Table5', value:5}]
-    this.setState({
+    fetch('http://localhost:8080/tables').then(response => response.json()).then(tables => {
+      const allTables = []
+      for (let i = 0; i < tables.length; i++) {
+        allTables.push({label: tables[i], value: tables[i]})
+      }
+      this.setState({
         allTables: allTables
-    })
+      })
+    }).catch(error => console.error(error))
   }
 
   handleChooseTable = (selected) => {
-    // TODO: Get all the attributes from the selected tables 
-
-    const attributes = [{name:'attr1', id:1}, {name:'attr2', id:2}, {name:'attr3', id:3},
-    {name:'attr4', id:4}, {name:'attr5', id:5}]
-
-    this.setState({
-        table: selected, 
-        allAttributes: attributes
-    })
+    fetch(`http://localhost:8080/tables/${selected.value}`).then(response => response.json()).then(attributes => {
+      const allAttributes = []
+      for (let i = 1; i <= attributes.length; i++) {
+        allAttributes.push({name: attributes[i-1], id: i})
+      }
+      this.setState({
+        table: selected.value,
+        allAttributes: allAttributes
+      })
+    }).catch(error => console.error(error))
   }
 
   handleChooseAttr = (selectedList, _) => {
@@ -51,13 +55,14 @@ class Admin extends Component {
         return
     }
 
-    // TODO: Run the query 
-    const response = "Response from table" + this.state.table +
-    " with attributes " + this.state.attributes.map(attr => attr.name)
-
-    this.setState({
-        queryResponse: response
-    })
+    const queryParams = new URLSearchParams()
+    this.state.attributes.forEach(attribute => queryParams.append('column', attribute.name));
+    fetch(`http://localhost:8080/project/${this.state.table}?${queryParams.toString()}`)
+      .then(response => response.json()).then(queryResponse => {
+        this.setState({
+          queryResponse: queryResponse
+        })
+      }).catch(error => console.error(error))
   }
 
   render() {
