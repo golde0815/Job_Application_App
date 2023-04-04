@@ -79,9 +79,9 @@ public class CompanyController {
 
     // 9. Nested Aggregation with GROUP BY
     @GetMapping("/topcompanies")
-    private List<TopCompany> topRatedCompanies() {
+    private List<TopCompany> topRatedCompanies(@RequestParam int minimumAverageRating) {
         try {
-            return companyDao.topRatedCompanies();
+            return companyDao.topRatedCompanies(minimumAverageRating);
         } catch (GenericSQLException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
         }

@@ -120,17 +120,19 @@ public class CompanyDao {
         }
     }
 
-    public List<TopCompany> topRatedCompanies() {
+    public List<TopCompany> topRatedCompanies(int minimumAverageRating) {
         String query = "SELECT COMPANY_ID, NAME, AVG_VALUE, AVG_SALARY FROM " +
                 "(SELECT R.COMPANY_ID AS COMPANY_ID, AVG(R.VALUE) AS AVG_VALUE, AVG(P.SALARY) AS AVG_SALARY " +
                 "FROM RATES R, POSTED_JOB P " +
                 "WHERE R.COMPANY_ID = P.COMPANY_ID " +
                 "GROUP BY R.COMPANY_ID " +
                 "HAVING AVG(R.VALUE) > (SELECT AVG(R2.VALUE) FROM RATES R2) " +
+                "AND AVG(R.VALUE) > ? " +
                 "AND AVG(P.SALARY) > (SELECT AVG(P2.SALARY) FROM POSTED_JOB P2)) NATURAL JOIN COMPANY";
-        try (Statement stmt = connection.createStatement()) {
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             List<TopCompany> result = new ArrayList<>();
-            ResultSet rs = stmt.executeQuery(query);
+            ps.setInt(1, minimumAverageRating);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 TopCompany model = new TopCompany(rs.getInt("company_id"),
                         rs.getString("name"),
