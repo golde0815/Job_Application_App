@@ -25,20 +25,9 @@ class PostNewJob extends Component {
                 'location': this.state['new-job-location'],
                 'description': this.state['new-job-description'],
                 'salary': this.state['new-job-salary'],
-                'recruiterEmail': this.state['new-job-recruiterEmail'],
+                'recruiterEmail': this.state['new-job-email'],
                 'category': this.state['new-job-category'],
                 'skill': this.state['new-job-skill'],
-            }
-
-            // Fulfiling not null conditions
-            if (job.location === "" ) {
-                window.alert("Location must be filled.")
-                return
-            }
-
-            if (job.description === "") {
-                window.alert("Description must be filled.")
-                return
             }
 
             // 1. INSERT
@@ -49,12 +38,19 @@ class PostNewJob extends Component {
                 },
                 body: JSON.stringify(job)
             }).then(response => {
-                console.log(response.json())
+                if (!response.ok) {
+                    return Promise.reject(response)
+                } else {
+                    return response.json()
+                }
+            }).then(response => {
+                console.log(response)
                 window.alert("New job has been successfully posted.")
-            })
-            .catch(error => {
-                console.error(error)
-                window.alert("An error occured while trying to insert this job. " + error)
+            }).catch(errorResponse => {
+                errorResponse.json().then(error => {
+                    console.error('Error: ', error)
+                    window.alert(`An error ${error.error} occurred with message ${error.message}`)
+                })
             })
 
             window.alert('New job has been posted with ID ' + JSON.stringify(job))

@@ -24,14 +24,25 @@ class CompanyProfile extends Component {
 
   componentDidMount = () => {
       const defaultCompanyId = DEFAULT_COMPANY_ID;
-      fetch(`http://localhost:8080/companies/${defaultCompanyId}`).then(response => response.json()).then(company => {
-          this.setState({
-            company: {
-              id: company.companyId,
-              name: company.name
-            }
-          })
-      }).catch(error => console.error(error))
+      fetch(`http://localhost:8080/companies/${defaultCompanyId}`).then(response => {
+        if (!response.ok) {
+            return Promise.reject(response)
+        } else {
+            return response.json()
+        }
+      }).then(company => {
+        this.setState({
+          company: {
+            id: company.companyId,
+            name: company.name
+          }
+        })
+      }).catch(errorResponse => {
+        errorResponse.json().then(error => {
+            console.error('Error: ', error)
+            window.alert(`An error ${error.error} occurred with message ${error.message}`)
+        })
+      })
   }
 
   handleToggleEdit = () => {
@@ -46,17 +57,24 @@ class CompanyProfile extends Component {
 
   handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this company?")) {
-      // TODO: Choose default company_id
       // 2. DELETE
       const defaultCompanyId = DEFAULT_COMPANY_ID;
       fetch(`http://localhost:8080/companies/${defaultCompanyId}`, {
         method: 'DELETE'
       }).then(response => {
+        if (!response.ok) {
+            return Promise.reject(response)
+        } else {
+            return response.json()
+        }
+      }).then(response => {
         console.log(response)
-        window.alert("Company has been successfully deleted.")
-      }).catch(error => {
-        console.error(error)
-        window.alert("An error occured while trying to delete this company. " + error)
+        window.alert("Company has been successfully deleted")
+      }).catch(errorResponse => {
+        errorResponse.json().then(error => {
+            console.error('Error: ', error)
+            window.alert(`An error ${error.error} occurred with message ${error.message}`)
+        })
       })
     }
   }

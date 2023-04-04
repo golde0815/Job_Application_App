@@ -19,7 +19,13 @@ class Admin extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:8080/tables').then(response => response.json()).then(tables => {
+    fetch('http://localhost:8080/tables').then(response => {
+      if (!response.ok) {
+          return Promise.reject(response)
+      } else {
+          return response.json()
+      }
+    }).then(tables => {
       const allTables = []
       for (let i = 0; i < tables.length; i++) {
         allTables.push({label: tables[i], value: tables[i]})
@@ -27,11 +33,22 @@ class Admin extends Component {
       this.setState({
         allTables: allTables
       })
-    }).catch(error => console.error(error))
+    }).catch(errorResponse => {
+      errorResponse.json().then(error => {
+          console.error('Error: ', error)
+          window.alert(`An error ${error.error} occurred with message ${error.message}`)
+      })
+    })
   }
 
   handleChooseTable = (selected) => {
-    fetch(`http://localhost:8080/tables/${selected.value}`).then(response => response.json()).then(attributes => {
+    fetch(`http://localhost:8080/tables/${selected.value}`).then(response => {
+      if (!response.ok) {
+          return Promise.reject(response)
+      } else {
+          return response.json()
+      }
+    }).then(attributes => {
       this.handleChooseAttr([])  
 
       const allAttributes = []
@@ -42,7 +59,12 @@ class Admin extends Component {
         table: selected.value,
         allAttributes: allAttributes
       })
-    }).catch(error => console.error(error))
+    }).catch(errorResponse => {
+      errorResponse.json().then(error => {
+          console.error('Error: ', error)
+          window.alert(`An error ${error.error} occurred with message ${error.message}`)
+      })
+    })
   }
 
   handleChooseAttr = (selectedList, _) => {
@@ -64,12 +86,22 @@ class Admin extends Component {
 
     const queryParams = new URLSearchParams()
     this.state.attributes.forEach(attribute => queryParams.append('column', attribute.name));
-    fetch(`http://localhost:8080/project/${this.state.table}?${queryParams.toString()}`)
-      .then(response => response.json()).then(queryResponse => {
+    fetch(`http://localhost:8080/project/${this.state.table}?${queryParams.toString()}`).then(response => {
+        if (!response.ok) {
+            return Promise.reject(response)
+        } else {
+            return response.json()
+        }
+      }).then(queryResponse => {
         this.setState({
           queryResponse: queryResponse
         })
-      }).catch(error => console.error(error))
+      }).catch(errorResponse => {
+        errorResponse.json().then(error => {
+            console.error('Error: ', error)
+            window.alert(`An error ${error.error} occurred with message ${error.message}`)
+        })
+      })
   }
 
   render() {

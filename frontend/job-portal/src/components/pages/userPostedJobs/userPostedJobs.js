@@ -16,13 +16,23 @@ class CompanyPostedJobs extends Component {
     componentDidMount = () => {
         // 7. Aggregation with GROUP BY
         // fetchedJobs already has numApplicants for each job
-        fetch('http://localhost:8080/jobs').then(response => response.json()).then(fetchedJobs => {
+        fetch('http://localhost:8080/jobs').then(response => {
+            if (!response.ok) {
+                return Promise.reject(response)
+            } else {
+                return response.json()
+            }
+        }).then(fetchedJobs => {
             this.setState({
                 allJobs: fetchedJobs,
                 jobs: fetchedJobs
             })
-        }).catch(error => console.error(error))
-
+        }).catch(errorResponse => {
+            errorResponse.json().then(error => {
+                console.error('Error: ', error)
+                window.alert(`An error ${error.error} occurred with message ${error.message}`)
+            })
+        })
     }
 
     handleApplyFilters = (postedAfter, location, salary) => {
@@ -55,7 +65,13 @@ class CompanyPostedJobs extends Component {
                 jobs: filteredJobs
             })
         } else {
-            fetch(`http://localhost:8080/jobs?${queryString}`).then(response => response.json()).then(filteredJobs => {
+            fetch(`http://localhost:8080/jobs?${queryString}`).then(response => {
+                if (!response.ok) {
+                    return Promise.reject(response)
+                } else {
+                    return response.json()
+                }
+            }).then(filteredJobs => {
                 this.setState({
                     jobs: 
                     this.state.allJobs.filter((job) => {
@@ -66,7 +82,12 @@ class CompanyPostedJobs extends Component {
                         }
                     })
                 })
-            }).catch(error => console.error(error))
+            }).catch(errorResponse => {
+                errorResponse.json().then(error => {
+                    console.error('Error: ', error)
+                    window.alert(`An error ${error.error} occurred with message ${error.message}`)
+                })
+            })
         }
     }
 

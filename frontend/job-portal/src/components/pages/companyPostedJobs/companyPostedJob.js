@@ -24,7 +24,13 @@ class CompanyPostedJob extends Component {
             attribute: 'job_id',
             value: this.props.jobId
         }).toString()
-        fetch(`http://localhost:8080/jobs?${queryString}`).then(response => response.json()).then(jobs => {
+        fetch(`http://localhost:8080/jobs?${queryString}`).then(response => {
+            if (!response.ok) {
+                return Promise.reject(response)
+            } else {
+                return response.json()
+            }
+        }).then(jobs => {
             const job = jobs[0]
             this.setState({
                 'jobId': job.jobId,
@@ -37,7 +43,12 @@ class CompanyPostedJob extends Component {
                 'category': job.category,
                 'skill': job.skill,
             })
-        }).catch(error => console.error(error))
+        }).catch(errorResponse =>  {
+            errorResponse.json().then(error => {
+                console.error('Error: ', error)
+                window.alert(`An error ${error.error} occurred with message ${error.message}`)
+            })
+        })
     }
 
     handleToggleEdit = () => {
@@ -89,11 +100,19 @@ class CompanyPostedJob extends Component {
                     },
                     body: JSON.stringify(requestBody)
                 }).then(response => {
+                    if (!response.ok) {
+                        return Promise.reject(response)
+                    } else {
+                        return response.json()
+                    }
+                }).then(response => {
                     console.log(response)
                     window.alert('Job Posting has been successfully updated')
-                }).catch(error => {
-                    console.error(error)
-                    window.alert('An error occured while updating the job posting. ' + error)
+                }).catch(errorResponse => {
+                    errorResponse.json().then(error => {
+                        console.error('Error: ', error)
+                        window.alert(`An error ${error.error} occurred with message ${error.message}`)
+                    })
                 })                
             }
         })

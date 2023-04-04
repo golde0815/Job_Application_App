@@ -25,18 +25,40 @@ class CompanyPostedJobs extends Component {
             attribute: 'company_id',
             value: defaultCompanyId
         }).toString()
-        fetch(`http://localhost:8080/jobs?${queryString}`).then(response => response.json()).then(jobs => {
+        fetch(`http://localhost:8080/jobs?${queryString}`).then(response => {
+            if (!response.ok) {
+                return Promise.reject(response)
+            } else {
+                return response.json()
+            }
+        }).then(jobs => {
             this.setState({
                 jobs: jobs
             })
-        }).catch(error => console.error(error))
+        }).catch(errorResponse => {
+            errorResponse.json().then(error => {
+                console.error('Error: ', error)
+                window.alert(`An error ${error.error} occurred with message ${error.message}`)
+            })
+        })
 
         // 10. Division
-        fetch(`http://localhost:8080/users/applications/${defaultCompanyId}`).then(response => response.json()).then(users => {
+        fetch(`http://localhost:8080/users/applications/${defaultCompanyId}`).then(response => {
+            if (!response.ok) {
+                return Promise.reject(response)
+            } else {
+                return response.json()
+            }
+        }).then(users => {
             this.setState({
                 starUsers: users.map(user => user.email).join(', ')
             })
-        }).catch(error => console.error(error))
+        }).catch(errorResponse => {
+            errorResponse.json().then(error => {
+                console.error('Error: ', error)
+                window.alert(`An error ${error.error} occurred with message ${error.message}`)
+            })
+        })
     }
 
     handleClickJob = (jobId) => {

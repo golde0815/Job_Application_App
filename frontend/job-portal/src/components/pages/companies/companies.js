@@ -60,11 +60,22 @@ class Companies extends Component {
                 companies: filteredCompanies
             })
         } else {
-            fetch(`http://localhost:8080/companies?${queryString}`).then(response => response.json()).then(filteredCompanies => {
+            fetch(`http://localhost:8080/companies?${queryString}`).then(response => {
+                if (!response.ok) {
+                    return Promise.reject(response)
+                } else {
+                    return response.json()
+                }
+            }).then(filteredCompanies => {
                 this.setState({
                     companies: filteredCompanies
                 })
-            }).catch(error => console.error(error))
+            }).catch(errorResponse => {
+                errorResponse.json().then(error => {
+                    console.error('Error: ', error)
+                    window.alert(`An error ${error.error} occurred with message ${error.message}`)
+                })
+            })
         }
     }
 
