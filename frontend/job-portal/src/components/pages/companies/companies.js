@@ -44,13 +44,11 @@ class Companies extends Component {
             filteredCompanies = this.state.allCompanies
         } else if (postedAfter === '') {
             // 8. Aggregation with HAVING
-            window.alert("Applying filters with minRating = " + minRating)
             params = {
                 'minimumRating': minRating
             }
         } else if (minRating === null) {
             // 6. JOIN
-            window.alert("Applying filters with postedAfter = " + postedAfter)
             params = {
                 'postedAfter': postedAfter
             }

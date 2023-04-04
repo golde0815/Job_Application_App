@@ -1,6 +1,4 @@
 import React, { Component }  from "react";
-// import "./companyPostedJobs.css";
-import UserPostedJob from "./userPostedJob";
 import FilterBar from "./filterBar";
 
 class CompanyPostedJobs extends Component {
@@ -10,7 +8,6 @@ class CompanyPostedJobs extends Component {
         this.state = {
             jobs: [],
             allJobs: [],
-            isSeeingJob: false,
             selectedJob: null
         }
 
@@ -25,13 +22,7 @@ class CompanyPostedJobs extends Component {
                 jobs: fetchedJobs
             })
         }).catch(error => console.error(error))
-    }
 
-    handleClickJob = (jobId) => {
-        this.setState(prevState => ({
-            isSeeingJob: !prevState.isSeeingJob,
-            selectedJob: jobId
-        }))
     }
 
     handleApplyFilters = (postedAfter, location, salary) => {
@@ -42,19 +33,16 @@ class CompanyPostedJobs extends Component {
         if (postedAfter === '' && location === null && salary == null) {
             filteredJobs = this.state.allJobs
         } else if (postedAfter === '' && location === null) {
-            window.alert("Applying filters with salary = " + salary)
             params = {
                 attribute: 'salary',
                 value: salary
             }
         } else if (postedAfter === '' & salary === null) {
-            window.alert("Applying filters with location = " + location)
             params = {
                 attribute: 'location',
                 value: location
             }
         } else if (location === null && salary === null) {
-            window.alert("Applying filters with postedAfter = " + postedAfter)
             params = {
                 attribute: 'posted_date',
                 value: postedAfter
@@ -69,17 +57,17 @@ class CompanyPostedJobs extends Component {
         } else {
             fetch(`http://localhost:8080/jobs?${queryString}`).then(response => response.json()).then(filteredJobs => {
                 this.setState({
-                    jobs: filteredJobs
+                    jobs: 
+                    this.state.allJobs.filter((job) => {
+                        if (filteredJobs.some((obj) => obj.jobId === job.jobId)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
                 })
             }).catch(error => console.error(error))
         }
-    }
-
-    handleGoBack = () => {
-        this.setState({
-            isSeeingJob: false, 
-            selectedJob: null
-        })
     }
 
     handleClearFilters = () => {
@@ -90,11 +78,8 @@ class CompanyPostedJobs extends Component {
 
 
   render() {
-
     return (
         <div>
-        {
-            !this.state.isSeeingJob &&
             <div>
                 <div className="page-header">
                     <h2>Posted Jobs</h2>
@@ -107,26 +92,18 @@ class CompanyPostedJobs extends Component {
                     {
                         this.state.jobs.map((job, index) => (
                             
-                            <button className="posted-job" onClick={() => this.handleClickJob(job.jobId)}>
+                            <button className="posted-job">
                                 <p className="posted-job-index">{index+1}</p>
                                 <p className="posted-job-name">{job.jobId}:{job.position}</p>
-                                <p className="posted-job-date">{job.postedDate}</p>
-                                <p className="posted-job-location">{job.location}</p>
+                                <p className="posted-job-date">Posted: {job.postedDate}</p>
+                                <p className="posted-job-location">Location: {job.location}</p>
+                                <p className="posted-job-num-applied">{job.numApplicants} users have applied for this job</p>
                             </button>
                         ))
                     }
 
                 </div>
             </div>
-        }
-        {
-            this.state.isSeeingJob && 
-                <UserPostedJob
-                    jobId={this.state.selectedJob}
-                    handleGoBack={this.handleGoBack}
-                ></UserPostedJob>
-
-        }
         </div>
         
     );

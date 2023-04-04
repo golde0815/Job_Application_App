@@ -54,7 +54,6 @@ class CompanyPostedJobs extends Component {
 
 
   render() {
-
     return (
         <div>
         {
