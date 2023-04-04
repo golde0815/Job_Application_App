@@ -12,8 +12,6 @@ class PostNewJob extends Component {
             'new-job-description': "",
             'new-job-salary': 0,
             'new-job-recruiterEmail': "",
-            'new-job-category': "",
-            'new-job-skill': "",
         }
     }
 
@@ -26,8 +24,6 @@ class PostNewJob extends Component {
                 'description': this.state['new-job-description'],
                 'salary': this.state['new-job-salary'],
                 'recruiterEmail': this.state['new-job-email'],
-                'category': this.state['new-job-category'],
-                'skill': this.state['new-job-skill'],
             }
 
             // 1. INSERT
@@ -52,8 +48,6 @@ class PostNewJob extends Component {
                     window.alert(`An error ${error.error} occurred with message ${error.message}`)
                 })
             })
-
-            window.alert('New job has been posted with ID ' + JSON.stringify(job))
         }
     }
 
@@ -96,20 +90,6 @@ class PostNewJob extends Component {
                     <input
                         type="text"
                         id="new-job-email"
-                        onChange={this.handleInputChange}
-                    />
-                </p>
-                <p>Category: 
-                    <input
-                        type="text"
-                        id="new-job-category"
-                        onChange={this.handleInputChange}
-                    />
-                </p>
-                <p>Skills: 
-                    <input
-                        type="text"
-                        id="new-job-skill"
                         onChange={this.handleInputChange}
                     />
                 </p>
