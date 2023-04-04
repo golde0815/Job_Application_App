@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Multiselect from 'multiselect-react-dropdown';
 import "./admin.css"
+import Dropdown from 'react-dropdown';
 
 class Admin extends Component {
  
@@ -9,7 +10,7 @@ class Admin extends Component {
 
     this.state = {
       allTables: [],
-      tables: [],
+      table: null,
       allAttributes: [],
       attributes: [],
       queryResponse: ""
@@ -19,21 +20,21 @@ class Admin extends Component {
   componentDidMount() {
     // TODO: Get all table names 
 
-    const allTables = [{name:'Table1', id:1}, {name:'Table2', id:2}, {name:'Table3', id:3},
-                            {name:'Table4', id:4}, {name:'Table5', id:5}]
+    const allTables = [{label:'Table1', value:1}, {label:'Table2', value:2}, {label:'Table3', value:3},
+                            {label:'Table4', value:4}, {label:'Table5', value:5}]
     this.setState({
         allTables: allTables
     })
   }
 
-  handleChooseTables = (selectedList, _) => {
+  handleChooseTable = (selected) => {
     // TODO: Get all the attributes from the selected tables 
 
     const attributes = [{name:'attr1', id:1}, {name:'attr2', id:2}, {name:'attr3', id:3},
     {name:'attr4', id:4}, {name:'attr5', id:5}]
 
     this.setState({
-        tables:selectedList, 
+        table: selected, 
         allAttributes: attributes
     })
   }
@@ -45,13 +46,13 @@ class Admin extends Component {
   }
 
   handleRun = () => {
-    if (this.state.tables === [] || this.state.attributes === []) {
+    if (this.state.table === null || this.state.attributes === []) {
         window.alert("Please select at least 1 table and attribute to run the query.")
         return
     }
 
     // TODO: Run the query 
-    const response = "Response from tables " + this.state.tables.map(table => table.name) +
+    const response = "Response from table" + this.state.table +
     " with attributes " + this.state.attributes.map(attr => attr.name)
 
     this.setState({
@@ -66,13 +67,7 @@ class Admin extends Component {
             <h2>Admin View</h2>
         </div>
         <p>Please select the tables you wish to get FROM:</p>
-        <Multiselect
-            options={this.state.allTables} 
-            selectedValues={this.state.tables} 
-            onSelect={this.handleChooseTables}
-            onRemove={this.handleChooseTables}
-            displayValue="name" 
-        />
+        <Dropdown options={this.state.allTables} value={this.state.table} onChange={this.handleChooseTable} placeholder="Select a table" />
         <p>Please select the attributes you wish to SELECT:</p>
         <Multiselect
             options={this.state.allAttributes} 
