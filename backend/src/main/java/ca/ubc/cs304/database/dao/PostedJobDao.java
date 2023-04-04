@@ -52,11 +52,7 @@ public class PostedJobDao {
     }
 
     public List<PostedJob> getAllPostedJobs() {
-        String query = "SELECT P.JOB_ID AS JOB_ID, COMPANY_ID, POSTED_DATE, " +
-                "POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL, NUM_APPLICANTS FROM " +
-                "(SELECT JOB_ID, COUNT(email) AS NUM_APPLICANTS " +
-                "FROM USER_APPLIES_TO " +
-                "GROUP BY JOB_ID) T RIGHT OUTER JOIN POSTED_JOB P ON T.JOB_ID = P.JOB_ID";
+        String query = "SELECT * FROM POSTED_JOB";
         try (Statement stmt = connection.createStatement()) {
             List<PostedJob> result = new ArrayList<>();
             ResultSet rs = stmt.executeQuery(query);
@@ -68,8 +64,7 @@ public class PostedJobDao {
                         rs.getString("location"),
                         rs.getString("description"),
                         rs.getInt("salary"),
-                        rs.getString("recruiter_email"),
-                        Optional.of(rs.getInt("num_applicants")));
+                        rs.getString("recruiter_email"));
                 result.add(model);
             }
             rs.close();
@@ -106,6 +101,38 @@ public class PostedJobDao {
             return result;
         } catch (SQLException | IllegalArgumentException e) {
             System.err.println("Select posted job failed: " + e.getMessage());
+            throw new GenericSQLException(e);
+        }
+    }
+
+    public PostedJob selectPostedJobWithNumApplicants(int jobId) {
+        String query = "SELECT P.JOB_ID AS JOB_ID, COMPANY_ID, POSTED_DATE, " +
+                "POSITION, LOCATION, DESCRIPTION, SALARY, RECRUITER_EMAIL, NUM_APPLICANTS FROM " +
+                "(SELECT JOB_ID, COUNT(email) AS NUM_APPLICANTS " +
+                "FROM USER_APPLIES_TO " +
+                "GROUP BY JOB_ID) T RIGHT OUTER JOIN POSTED_JOB P ON T.JOB_ID = P.JOB_ID " +
+                "WHERE P.JOB_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, jobId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                PostedJob model = new PostedJob(rs.getInt("job_id"),
+                        rs.getInt("company_id"),
+                        rs.getDate("posted_date").toLocalDate(),
+                        rs.getString("position"),
+                        rs.getString("location"),
+                        rs.getString("description"),
+                        rs.getInt("salary"),
+                        rs.getString("recruiter_email"),
+                        Optional.of(rs.getInt("num_applicants")));
+                rs.close();
+                return model;
+            } else {
+                rs.close();
+                return null;
+            }
+        } catch (SQLException e) {
+            System.err.println("Select posted job with num applicants failed: " + e.getMessage());
             throw new GenericSQLException(e);
         }
     }

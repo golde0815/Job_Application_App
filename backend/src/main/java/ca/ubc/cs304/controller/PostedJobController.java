@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,9 +45,18 @@ public class PostedJobController {
         }
     }
 
-    // 4. SELECT and 7. Aggregation with GROUP BY
+    // 7. Aggregation with GROUP BY
+    @GetMapping("/jobs/{jobId}")
+    private PostedJob selectPostedJobWithNumApplicants(@PathVariable int jobId) {
+        try {
+            return postedJobDao.selectPostedJobWithNumApplicants(jobId);
+        } catch (GenericSQLException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
+        }
+    }
+
+    // 4. SELECT
     @GetMapping("/jobs")
-    @ResponseBody
     private List<PostedJob> selectPostedJob(@RequestParam(required = false) String attribute,
                                             @RequestParam(required = false) String value) {
         try {
