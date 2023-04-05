@@ -132,6 +132,7 @@ class CompanyPostedJob extends Component {
                 GO BACK
             </button>
             <p>Posted: {postedDate}</p>
+            <p>Number of Applicants: {numApplicants}</p>
             <div className="posted-job-info">
                 <p>Position: 
                     <input
