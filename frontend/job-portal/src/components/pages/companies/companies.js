@@ -21,7 +21,11 @@ class Companies extends Component {
             })
         }).catch(error => console.error(error))
 
-        fetch(`http://localhost:8080/topcompanies`).then(response => {
+        const params = {
+            minimumAverageRating: 0
+        }
+        const queryString = new URLSearchParams(params).toString()
+        fetch(`http://localhost:8080/topcompanies?${queryString}`).then(response => {
             if (!response.ok) {
                 return Promise.reject(response)
             } else {
