@@ -117,7 +117,6 @@ class CompanyPostedJobs extends Component {
                                 <p className="posted-job-date">Posted: {job.postedDate}</p>
                                 <p className="posted-job-location">Location: {job.location}</p>
                                 <p className="posted-job-salary">Salary: {job.salary}</p>
-                                <p className="posted-job-num-applied">{job.numApplicants} users have applied for this job</p>
                             </button>
                         ))
                     }
