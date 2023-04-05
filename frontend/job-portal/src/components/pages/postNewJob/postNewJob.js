@@ -1,8 +1,10 @@
 import React, { Component }  from "react";
 import "./postNewJob.css";
-import { DEFAULT_COMPANY_ID } from "../../../constants";
+import { DefaultCompanyContext } from "../../../DefaultCompanyContext";
 
 class PostNewJob extends Component {
+    static contextType = DefaultCompanyContext;
+
     constructor(props) {
         super(props)
 
@@ -17,8 +19,10 @@ class PostNewJob extends Component {
 
     handlePostJob = () => {
         if (window.confirm("Are you sure you want to post this job?")) {
+            const [defaultCompanyId, setdefaultCompanyId] = this.context;
+
             const job = {
-                'companyId': DEFAULT_COMPANY_ID,
+                'companyId': defaultCompanyId,
                 'position': this.state['new-job-position'],
                 'location': this.state['new-job-location'],
                 'description': this.state['new-job-description'],

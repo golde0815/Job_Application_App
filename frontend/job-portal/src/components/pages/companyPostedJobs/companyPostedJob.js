@@ -132,8 +132,6 @@ class CompanyPostedJob extends Component {
                 GO BACK
             </button>
             <p>Posted: {postedDate}</p>
-            // TODO: @arya implement button to toggle show numApplicants and call API again
-            <p>Number of Applicants: {numApplicants}</p>
             <div className="posted-job-info">
                 <p>Position: 
                     <input

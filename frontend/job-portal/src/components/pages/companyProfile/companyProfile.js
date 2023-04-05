@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import "./companyProfile.css"
 import { Link } from "react-router-dom";
-import "../../../constants"
-import { DEFAULT_COMPANY_ID } from '../../../constants';
+import { DefaultCompanyContext } from '../../../DefaultCompanyContext';
 
 class CompanyProfile extends Component {
+  static contextType = DefaultCompanyContext;
+
   constructor(props) {
     super(props)
 
@@ -22,9 +23,25 @@ class CompanyProfile extends Component {
     }
   }
 
-  componentDidMount = () => {
-      const defaultCompanyId = DEFAULT_COMPANY_ID;
-      fetch(`http://localhost:8080/companies/${defaultCompanyId}`).then(response => {
+  
+  componentDidMount() {
+    const [defaultCompanyId, setdefaultCompanyId] = this.context;
+    this.fetchCompanyData(defaultCompanyId);
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const context = this.context;
+    if (context) {
+      const [defaultCompanyId, setdefaultCompanyId] = context;
+      if (prevState.company.id !== defaultCompanyId) {
+        this.fetchCompanyData(defaultCompanyId);
+      }
+    }
+  }
+
+  fetchCompanyData(defaultCompanyId) {
+    fetch(`http://localhost:8080/companies/${defaultCompanyId}`)
+      .then(response => {
         if (!response.ok) {
             return Promise.reject(response)
         } else {
@@ -50,7 +67,7 @@ class CompanyProfile extends Component {
       isEdit: !prevState.isEdit
     }), () => {
       if (this.state.isEdit) {
-        // TODO:save new info, give confirmation message, but we dont need this for the demo??
+        // we dont need this for the demo
       }
     });
   };
@@ -58,7 +75,7 @@ class CompanyProfile extends Component {
   handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this company?")) {
       // 2. DELETE
-      const defaultCompanyId = DEFAULT_COMPANY_ID;
+      const [ defaultCompanyId ] = this.context;
       fetch(`http://localhost:8080/companies/${defaultCompanyId}`, {
         method: 'DELETE'
       }).then(response => {

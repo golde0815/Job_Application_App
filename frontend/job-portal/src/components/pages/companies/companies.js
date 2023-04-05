@@ -20,6 +20,23 @@ class Companies extends Component {
                 allCompanies: fetchedList
             })
         }).catch(error => console.error(error))
+
+        fetch(`http://localhost:8080/topcompanies`).then(response => {
+            if (!response.ok) {
+                return Promise.reject(response)
+            } else {
+                return response.json()
+            }
+        }).then(topList => {
+            this.setState({
+                topCompanies: topList
+            })
+        }).catch(errorResponse => {
+            errorResponse.json().then(error => {
+                console.error('Error: ', error)
+                window.alert(`An error ${error.error} occurred with message ${error.message}`)
+            })
+        })
     }
 
     handleGoBack = () => {
@@ -62,30 +79,6 @@ class Companies extends Component {
             }).then(filteredCompanies => {
                 this.setState({
                     companies: filteredCompanies
-                })
-            }).catch(errorResponse => {
-                errorResponse.json().then(error => {
-                    console.error('Error: ', error)
-                    window.alert(`An error ${error.error} occurred with message ${error.message}`)
-                })
-            })
-        }
-
-        if (minRating !== null) {
-            // 9. Nested Aggregation with GROUP BY
-            const params = {
-                minimumAverageRating: minRating
-            }
-            const queryString = new URLSearchParams(params).toString()
-            fetch(`http://localhost:8080/topcompanies?${queryString}`).then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response)
-                } else {
-                    return response.json()
-                }
-            }).then(topList => {
-                this.setState({
-                    topCompanies: topList
                 })
             }).catch(errorResponse => {
                 errorResponse.json().then(error => {

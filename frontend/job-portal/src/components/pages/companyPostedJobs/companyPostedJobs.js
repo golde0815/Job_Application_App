@@ -1,10 +1,11 @@
 import React, { Component }  from "react";
 import "./companyPostedJobs.css";
 import CompanyPostedJob from "./companyPostedJob";
-import "../../../constants"
-import { DEFAULT_COMPANY_ID } from "../../../constants";
+import { DefaultCompanyContext } from "../../../DefaultCompanyContext";
 
 class CompanyPostedJobs extends Component {
+    static contextType = DefaultCompanyContext;
+
     constructor(props) {
         super(props)
 
@@ -12,15 +13,17 @@ class CompanyPostedJobs extends Component {
             jobs: [],
             starUsers: '',
             isSeeingJob: false,
-            selectedJob: null
+            selectedJob: null,
         }
-
     }
 
     componentDidMount = () => {
         // TODO: choose what the default company_id should be
-        const defaultCompanyId = DEFAULT_COMPANY_ID;
+        const [ defaultCompanyId ] = this.context;
+        this.fetchCompanyData(defaultCompanyId)
+    }
 
+    fetchCompanyData(defaultCompanyId) {
         const queryString = new URLSearchParams({
             attribute: 'company_id',
             value: defaultCompanyId
