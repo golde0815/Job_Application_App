@@ -20,7 +20,8 @@ public class UserAccountDao {
     }
 
     public List<UserAccount> appliedToAllJobsFrom(int companyId) {
-        String query = "SELECT * FROM USER_ACCOUNT U " +
+        String query =
+                "SELECT * FROM USER_ACCOUNT U " +
                 "WHERE NOT EXISTS " +
                 "((SELECT JOB_ID FROM POSTED_JOB WHERE COMPANY_ID = ?) " +
                 "MINUS " +

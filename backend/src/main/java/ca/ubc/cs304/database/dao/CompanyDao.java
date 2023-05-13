@@ -121,7 +121,8 @@ public class CompanyDao {
     }
 
     public List<TopCompany> topRatedCompanies(int minimumAverageRating) {
-        String query = "SELECT COMPANY_ID, NAME, AVG_VALUE, AVG_SALARY FROM " +
+        String query =
+                "SELECT COMPANY_ID, NAME, AVG_VALUE, AVG_SALARY FROM " +
                 "(SELECT R.COMPANY_ID AS COMPANY_ID, AVG(R.VALUE) AS AVG_VALUE, AVG(P.SALARY) AS AVG_SALARY " +
                 "FROM RATES R, POSTED_JOB P " +
                 "WHERE R.COMPANY_ID = P.COMPANY_ID " +
